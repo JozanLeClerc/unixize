@@ -38,39 +38,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * unixize: src/c_unixize.c
- * 2020-11-02 22:14
+ * unixize: src/c_opts.c
+ * 2020-11-02 23:37
  * Joe
  *
- * This is the main function and entrypoint of the program.
+ * This is where we handle command line options
  */
 
-/* #ifdef __linux__ */
-/* # include <linux/limits.h> */
-/* #else */
-/* # include <limits.h> */
-/* #endif */
+#include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 
 #include "c_opts.h"
 
-int
-main
-(int			argc,
+void
+c_opts
+(struct opts_s*	opts,
+ int			argc,
  const char*	argv[])
 {
-	struct opts_s	opts;
+	int	opt;
 
-	c_opts(&opts, argc, argv);
-	if (opts.recursive == TRUE)
-		printf("Recursive\n");
-	if (opts.verbose == TRUE)
-		printf("Verbose\n");
-	return (0);
+	opts->recursive = FALSE;
+	opts->verbose = FALSE;
+	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
+		if (opt == 'R') {
+			opts->recursive = TRUE;
+		}
+		else if (opt == 'v') {
+			opts->verbose = TRUE;
+		}
+		else if (opt == '?') {
+			dprintf(
+				STDERR_FILENO,
+				"unixize: %c: unknown option\n",
+				optopt
+			);
+			exit(1);
+		}
+	}
+	if (optind < argc && argv[optind] != NULL) {
+		printf("arg: %s\n", argv[optind]);
+	}
 }
-
-/*
- * Files prefixes index
- * --------------------
- * c_  -> core program related
- */

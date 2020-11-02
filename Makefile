@@ -34,6 +34,7 @@ RM				 = rm -rf
 MKDIR			 = mkdir -p
 
 SRCS_NAME		 = c_unixize
+SRCS_NAME		+= c_opts
 
 SRCS			 = $(addprefix ${SRCS_DIR}, $(addsuffix .c, ${SRCS_NAME}))
 INCS			 = $(addprefix ${SRCS_DIR}, $(addsuffix .h, ${SRCS_NAME}))

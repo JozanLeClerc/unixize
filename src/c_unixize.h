@@ -39,11 +39,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * unixize: src/c_unixize.h
- * 2020-11-02 22:14
+ * 2020-11-02 23:07
  * Joe
  */
 
 #ifndef __C_UNIXIZE_H__
 #define __C_UNIXIZE_H__
+
+#define C_OPTS	":Rv"
+
+typedef enum bool_e {
+	FALSE,
+	TRUE
+} bool_t;
 
 #endif /* ifndef __C_UNIXIZE_H__ */
