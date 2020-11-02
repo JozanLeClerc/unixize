@@ -50,14 +50,13 @@
 /* #else */
 /* # include <limits.h> */
 /* #endif */
+
 #include <stdio.h>
 
 #include "c_opts.h"
 
 int
-main
-(int			argc,
- const char*	argv[])
+main(int argc, const char*	argv[])
 {
 	struct opts_s	opts;
 

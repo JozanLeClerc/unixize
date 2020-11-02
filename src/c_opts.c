@@ -42,7 +42,7 @@
  * 2020-11-02 23:37
  * Joe
  *
- * This is where we handle command line options
+ * This is where we handle command line options.
  */
 
 #include <stdlib.h>
@@ -52,10 +52,7 @@
 #include "c_opts.h"
 
 void
-c_opts
-(struct opts_s*	opts,
- int			argc,
- const char*	argv[])
+c_opts(struct opts_s* opts, int argc, const char* argv[])
 {
 	int	opt;
 
@@ -70,10 +67,10 @@ c_opts
 		}
 		else if (opt == '?') {
 			dprintf(
-				STDERR_FILENO,
-				"unixize: %c: unknown option\n",
-				optopt
-			);
+					STDERR_FILENO,
+					"unixize: %c: unknown option\n",
+					optopt
+					);
 			exit(1);
 		}
 	}
