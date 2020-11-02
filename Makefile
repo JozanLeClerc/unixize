@@ -1,15 +1,3 @@
-################################################################################
-#*                                                    =====    ===============*#
-#*   File     : Makefile                              ======  ================*#
-#*   Author   : Joe                                   ======  ================*#
-#*   Date     : 2020-11-02                            ======  ====   ====   ==*#
-#*   Info     : GNU Makefile                          ======  ===     ==  =  =*#
-#*                                                    ======  ===  =  ==     =*#
-#*                                                    =  ===  ===  =  ==  ====*#
-#*                                                    =  ===  ===  =  ==  =  =*#
-#*                                                    ==     =====   ====   ==*#
-################################################################################
-
 default: msan
 
 SHELL		:= /bin/sh
@@ -36,6 +24,27 @@ OBJS		 = $(patsubst ${SRCS_DIR}%.c, ${OBJS_DIR}%.c.o, ${SRCS})
 
 TARGET		 = unixize
 
+${OBJS_DIR}%.o: ${SRCS_DIR}%.c ${INCS} Makefile
+	@${MKDIR} ${OBJS_DIR}
+	${CC} -c ${CFLAGS} $@ $<
+
+all: ${OBJS}
+	${CC} ${CFLAGS} -o ${TARGET} ${OBJS}
+
+debug: CFLAGS += -glldb
+debug: all
+
+asan: CFLAGS += -glldb
+asan: CFLAGS += -fsanitize=address
+asan: all
+
+msan: CFLAGS += -glldb
+msan: CFLAGS += -fsanitize=memory
+msan: CFLAGS += -fsanitize-memory-track-origins
+msan: all
+
 clean:
 	${RM} ${OBJS_DIR}
 	${RM} ${TARGET}
+
+.PHONY:	all clean debug asan msan
