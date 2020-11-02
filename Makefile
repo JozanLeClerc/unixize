@@ -1,35 +1,54 @@
-default: msan
+# ========================
+# =====    ===============
+# ======  ================
+# ======  ================
+# ======  ====   ====   ==
+# ======  ===     ==  =  =
+# ======  ===  =  ==     =
+# =  ===  ===  =  ==  ====
+# =  ===  ===  =  ==  =  =
+# ==     =====   ====   ==
+# ========================
+#
+# unixize: Makefile
+# 2020-11-02 21:43
+# Joe
+#
+# GNU Makefile
 
-SHELL		:= /bin/sh
+.DEFAULT_GOAL	:= msan
+SHELL			:= /bin/sh
 
-DESTDIR		 = /usr/local
-SRCS_DIR	 = src/
-OBJS_DIR	 = obj/
+DESTDIR			 = /usr/local
+SRCS_DIR		 = src/
+OBJS_DIR		 = obj/
 
-CC			 = cc
-CFLAGS		 = -std=c89
-CFLAGS		+= -Wall
-CFLAGS		+= -Wextra
-CFLAGS		+= -Werror
-CFLAGS		+= -pedantic
+CC				 = cc
+CFLAGS			 = -std=c89
+CFLAGS			+= -Wall
+CFLAGS			+= -Wextra
+CFLAGS			+= -Werror
+CFLAGS			+= -pedantic
 
-RM			 = rm -f
-MKDIR		 = mkdir -p
+RM				 = rm -rf
+MKDIR			 = mkdir -p
 
-SRCS_NAME	 = c_unixize
+SRCS_NAME		 = c_unixize
 
-SRCS		 = $(addprefix ${SRCS_DIR}, $(addsuffix .c, ${SRCS_NAME}))
-INCS		 = $(addprefix ${SRCS_DIR}, $(addsuffix .h, ${SRCS_NAME}))
-OBJS		 = $(patsubst ${SRCS_DIR}%.c, ${OBJS_DIR}%.c.o, ${SRCS})
+SRCS			 = $(addprefix ${SRCS_DIR}, $(addsuffix .c, ${SRCS_NAME}))
+INCS			 = $(addprefix ${SRCS_DIR}, $(addsuffix .h, ${SRCS_NAME}))
+OBJS			 = $(patsubst ${SRCS_DIR}%.c, ${OBJS_DIR}%.c.o, ${SRCS})
 
-TARGET		 = unixize
+TARGET			 = unixize
 
-${OBJS_DIR}%.o: ${SRCS_DIR}%.c ${INCS} Makefile
+${OBJS_DIR}%.c.o: ${SRCS_DIR}%.c ${INCS} Makefile
 	@${MKDIR} ${OBJS_DIR}
-	${CC} -c ${CFLAGS} $@ $<
+	${CC} -c ${CFLAGS} -o $@ $<
 
-all: ${OBJS}
+${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} -o ${TARGET} ${OBJS}
+
+all: ${TARGET}
 
 debug: CFLAGS += -glldb
 debug: all
