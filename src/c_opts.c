@@ -58,7 +58,12 @@ c_ask_confirm(const char dir[])
 {
 	char c;
 
-	printf("unixize directory %s? (y/n [n]) ", dir);
+	if (strncmp(dir, ".", 2 * sizeof(char)) == 0) {
+		printf("unixize current directory? (y/n [n]) ");
+	}
+	else {
+		printf("unixize %s? (y/n [n]) ", dir);
+	}
 	scanf("%c", &c);
 	if (c != 'y' && c != 'Y') {
 		printf("not unixized\n");
@@ -81,14 +86,8 @@ c_get_opts(struct opts_s* opts,
 	opts->hyphen = FALSE;
 	confirm = FALSE;
 	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
-		if (opt == 'R') {
-			opts->recursive = TRUE;
-		}
-		else if (opt == 'v') {
-			opts->verbose = TRUE;
-		}
-		else if (opt == 'p') {
-			opts->pretend = TRUE;
+		if (opt == 'a') {
+			opts->hidden = TRUE;
 		}
 		else if (opt == 'h') {
 			/* c_dump_usage(); */
@@ -96,6 +95,18 @@ c_get_opts(struct opts_s* opts,
 		}
 		else if (opt == 'i') {
 			confirm = TRUE;
+		}
+		else if (opt == 'n') {
+			opts->hyphen = TRUE;
+		}
+		else if (opt == 'p') {
+			opts->pretend = TRUE;
+		}
+		else if (opt == 'R') {
+			opts->recursive = TRUE;
+		}
+		else if (opt == 'v') {
+			opts->verbose = TRUE;
 		}
 		else if (opt == '?') {
 			dprintf(STDERR_FILENO,
@@ -106,9 +117,12 @@ c_get_opts(struct opts_s* opts,
 	}
 	if (optind < argc && argv[optind] != NULL) {
 		strncpy(opts->dir, argv[optind], PATH_MAX);
+		if (opts->dir[strlen(opts->dir) - 1] == '/') {
+			opts->dir[strlen(opts->dir) - 1] = 0x00;
+		}
 	}
-	if (argv[optind] == NULL) {
-		strncpy(opts->dir, ".", 2);
+	else if (argv[optind] == NULL) {
+		strncpy(opts->dir, ".", 2 * sizeof(char));
 	}
 	if (confirm == TRUE) {
 		c_ask_confirm(opts->dir);

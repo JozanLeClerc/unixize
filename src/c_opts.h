@@ -54,14 +54,14 @@
 
 #include "c_unixize.h"
 
-#define C_OPTS	"hinpRv"
+#define C_OPTS	"ahinpRv"
 
 struct opts_s {
-	bool_t	recursive;
-	bool_t	verbose;
-	bool_t	pretend;
 	bool_t	hidden;
 	bool_t	hyphen;
+	bool_t	pretend;
+	bool_t	recursive;
+	bool_t	verbose;
 	char	dir[PATH_MAX];
 };
 
