@@ -54,6 +54,14 @@
 #include "c_unixize.h"
 
 static void
+c_dump_usage(void)
+{
+	dprintf(STDERR_FILENO,
+			C_USAGE_FMT,
+			C_OPTS);
+}
+
+static void
 c_ask_confirm(const char dir[])
 {
 	char c;
@@ -90,7 +98,7 @@ c_get_opts(struct opts_s* opts,
 			opts->hidden = TRUE;
 		}
 		else if (opt == 'h') {
-			/* c_dump_usage(); */
+			c_dump_usage();
 			exit(0);
 		}
 		else if (opt == 'i') {
@@ -109,9 +117,7 @@ c_get_opts(struct opts_s* opts,
 			opts->verbose = TRUE;
 		}
 		else if (opt == '?') {
-			dprintf(STDERR_FILENO,
-					"unixize: %c: unknown option\n",
-					optopt);
+			c_dump_usage();
 			exit(1);
 		}
 	}
