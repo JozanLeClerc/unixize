@@ -66,7 +66,7 @@ main(int argc, const char*	argv[])
 	if (opts.verbose == TRUE)
 		printf("Verbose\n");
 	if (opts.pretend == TRUE)
-		printf("Verbose\n");
+		printf("Pretend\n");
 	return (0);
 }
 

@@ -58,6 +58,9 @@ c_opts(struct opts_s* opts, int argc, const char* argv[])
 
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
+	opts->pretend = FALSE;
+	opts->hidden  = FALSE;
+	opts->hyphen  = FALSE;
 	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
 		if (opt == 'R') {
 			opts->recursive = TRUE;
@@ -67,6 +70,10 @@ c_opts(struct opts_s* opts, int argc, const char* argv[])
 		}
 		else if (opt == 'p') {
 			opts->pretend = TRUE;
+		}
+		else if (opt == 'h') {
+			/* c_dump_usage(); */
+			exit(0);
 		}
 		else if (opt == '?') {
 			dprintf(

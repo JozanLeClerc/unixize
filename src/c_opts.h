@@ -41,8 +41,6 @@
  * unixize: src/c_opts.h
  * 2020-11-02 23:37
  * Joe
- *
- * This is where we handle command line options
  */
 
 #ifndef __C_OPTS_H__
@@ -50,12 +48,14 @@
 
 #include "c_unixize.h"
 
-#define C_OPTS	"Rvp"
+#define C_OPTS	"hpnRv"
 
 struct opts_s {
 	bool_t	recursive;
 	bool_t	verbose;
 	bool_t	pretend;
+	bool_t	hidden;
+	bool_t	hyphen;
 };
 
 void c_opts(struct opts_s*, int, const char*[]);
