@@ -46,25 +46,10 @@
 #ifndef __C_OPTS_H__
 #define __C_OPTS_H__
 
-#ifdef __linux__
-#include <linux/limits.h>
-#else
-#include <limits.h>
-#endif
-
 #include "c_unixize.h"
 
 #define C_OPTS		"ahinpRv"
 #define C_USAGE_FMT	"usage: unixize [-%s] [directory]\n"
-
-struct opts_s {
-	bool_t	hidden;
-	bool_t	hyphen;
-	bool_t	pretend;
-	bool_t	recursive;
-	bool_t	verbose;
-	char	dir[PATH_MAX];
-};
 
 void c_get_opts(struct opts_s*, int, const char*[]);
 

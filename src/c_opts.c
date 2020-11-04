@@ -80,9 +80,9 @@ c_ask_confirm(const char dir[])
 }
 
 void
-c_get_opts(struct opts_s* opts,
-		   int			  argc,
-		   const char*	  argv[])
+c_get_opts(struct opts_s*	opts,
+		   int				argc,
+		   const char*		argv[])
 {
 	int opt;
 	bool_t confirm;

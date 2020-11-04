@@ -45,27 +45,22 @@
  * This is the main function and entrypoint of the program.
  */
 
-#include <stdio.h>
-
 #include "c_opts.h"
 
+void
+c_init(struct opts_s* opts)
+{
+	(void)opts;
+}
+
 int
-main(int		 argc,
-	 const char* argv[])
+main(int			argc,
+	 const char*	argv[])
 {
 	struct opts_s opts;
 
 	c_get_opts(&opts, argc, argv);
-	if (opts.recursive == TRUE)
-		printf("Recursive\n");
-	if (opts.verbose == TRUE)
-		printf("Verbose\n");
-	if (opts.pretend == TRUE)
-		printf("Pretend\n");
-	if (opts.hidden == TRUE)
-		printf("Hidden\n");
-	if (opts.hyphen == TRUE)
-		printf("Hyphen\n");
+	c_init(&opts);
 	return (0);
 }
 

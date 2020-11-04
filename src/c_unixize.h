@@ -46,9 +46,26 @@
 #ifndef __C_UNIXIZE_H__
 #define __C_UNIXIZE_H__
 
+#ifdef __linux__
+#include <linux/limits.h>
+#else
+#include <limits.h>
+#endif
+
 typedef enum bool_e {
 	FALSE,
 	TRUE
 } bool_t;
+
+struct opts_s {
+	bool_t	hidden;
+	bool_t	hyphen;
+	bool_t	pretend;
+	bool_t	recursive;
+	bool_t	verbose;
+	char	dir[PATH_MAX];
+};
+
+void c_init(struct opts_s*);
 
 #endif /* ifndef __C_UNIXIZE_H__ */
