@@ -65,6 +65,8 @@ main(int argc, const char*	argv[])
 		printf("Recursive\n");
 	if (opts.verbose == TRUE)
 		printf("Verbose\n");
+	if (opts.pretend == TRUE)
+		printf("Verbose\n");
 	return (0);
 }
 

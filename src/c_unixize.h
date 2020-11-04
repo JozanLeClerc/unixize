@@ -46,8 +46,6 @@
 #ifndef __C_UNIXIZE_H__
 #define __C_UNIXIZE_H__
 
-#define C_OPTS	":Rv"
-
 typedef enum bool_e {
 	FALSE,
 	TRUE

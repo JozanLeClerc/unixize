@@ -50,9 +50,12 @@
 
 #include "c_unixize.h"
 
+#define C_OPTS	"Rvp"
+
 struct opts_s {
 	bool_t	recursive;
 	bool_t	verbose;
+	bool_t	pretend;
 };
 
 void c_opts(struct opts_s*, int, const char*[]);

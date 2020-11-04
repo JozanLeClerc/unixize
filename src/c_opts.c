@@ -65,6 +65,9 @@ c_opts(struct opts_s* opts, int argc, const char* argv[])
 		else if (opt == 'v') {
 			opts->verbose = TRUE;
 		}
+		else if (opt == 'p') {
+			opts->pretend = TRUE;
+		}
 		else if (opt == '?') {
 			dprintf(
 					STDERR_FILENO,
@@ -73,6 +76,9 @@ c_opts(struct opts_s* opts, int argc, const char* argv[])
 					);
 			exit(1);
 		}
+	}
+	if (opts->pretend == TRUE) {
+		opts->verbose = TRUE;
 	}
 	if (optind < argc && argv[optind] != NULL) {
 		printf("arg: %s\n", argv[optind]);
