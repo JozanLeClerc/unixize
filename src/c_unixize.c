@@ -45,28 +45,27 @@
  * This is the main function and entrypoint of the program.
  */
 
-/* #ifdef __linux__ */
-/* # include <linux/limits.h> */
-/* #else */
-/* # include <limits.h> */
-/* #endif */
-
 #include <stdio.h>
 
 #include "c_opts.h"
 
 int
-main(int argc, const char*	argv[])
+main(int		 argc,
+	 const char* argv[])
 {
-	struct opts_s	opts;
+	struct opts_s opts;
 
-	c_opts(&opts, argc, argv);
+	c_get_opts(&opts, argc, argv);
 	if (opts.recursive == TRUE)
 		printf("Recursive\n");
 	if (opts.verbose == TRUE)
 		printf("Verbose\n");
 	if (opts.pretend == TRUE)
 		printf("Pretend\n");
+	if (opts.hidden == TRUE)
+		printf("Hidden\n");
+	if (opts.hyphen == TRUE)
+		printf("Hyphen\n");
 	return (0);
 }
 

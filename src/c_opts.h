@@ -46,9 +46,15 @@
 #ifndef __C_OPTS_H__
 #define __C_OPTS_H__ value
 
+#ifdef __linux__
+# include <linux/limits.h>
+#else
+# include <limits.h>
+#endif
+
 #include "c_unixize.h"
 
-#define C_OPTS	"hpnRv"
+#define C_OPTS	"hinpRv"
 
 struct opts_s {
 	bool_t	recursive;
@@ -56,8 +62,9 @@ struct opts_s {
 	bool_t	pretend;
 	bool_t	hidden;
 	bool_t	hyphen;
+	char	dir[PATH_MAX];
 };
 
-void c_opts(struct opts_s*, int, const char*[]);
+void c_get_opts(struct opts_s*, int, const char*[]);
 
 #endif /* ifndef __C_OPTS_H__ */

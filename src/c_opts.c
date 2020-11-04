@@ -46,21 +46,40 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 
 #include "c_opts.h"
+#include "c_unixize.h"
+
+static void
+c_ask_confirm(const char dir[])
+{
+	char c;
+
+	printf("unixize directory %s? (y/n [n]) ", dir);
+	scanf("%c", &c);
+	if (c != 'y' && c != 'Y') {
+		printf("not unixized\n");
+		exit(0);
+	}
+}
 
 void
-c_opts(struct opts_s* opts, int argc, const char* argv[])
+c_get_opts(struct opts_s* opts,
+		   int			  argc,
+		   const char*	  argv[])
 {
-	int	opt;
+	int opt;
+	bool_t confirm;
 
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
 	opts->pretend = FALSE;
-	opts->hidden  = FALSE;
-	opts->hyphen  = FALSE;
+	opts->hidden = FALSE;
+	opts->hyphen = FALSE;
+	confirm = FALSE;
 	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
 		if (opt == 'R') {
 			opts->recursive = TRUE;
@@ -75,19 +94,26 @@ c_opts(struct opts_s* opts, int argc, const char* argv[])
 			/* c_dump_usage(); */
 			exit(0);
 		}
+		else if (opt == 'i') {
+			confirm = TRUE;
+		}
 		else if (opt == '?') {
-			dprintf(
-					STDERR_FILENO,
+			dprintf(STDERR_FILENO,
 					"unixize: %c: unknown option\n",
-					optopt
-					);
+					optopt);
 			exit(1);
 		}
 	}
+	if (optind < argc && argv[optind] != NULL) {
+		strncpy(opts->dir, argv[optind], PATH_MAX);
+	}
+	if (argv[optind] == NULL) {
+		strncpy(opts->dir, ".", 2);
+	}
+	if (confirm == TRUE) {
+		c_ask_confirm(opts->dir);
+	}
 	if (opts->pretend == TRUE) {
 		opts->verbose = TRUE;
-	}
-	if (optind < argc && argv[optind] != NULL) {
-		printf("arg: %s\n", argv[optind]);
 	}
 }
