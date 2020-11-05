@@ -66,7 +66,7 @@ main
 
 	c_get_opts(&opts, argc, argv);
 	if (chdir((const char*)opts.dir) == -1) {
-		u_dump_err();
+		u_dump_errno();
 		return (1);
 	}
 	og_files = c_lfiles_gather();

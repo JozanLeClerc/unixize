@@ -115,16 +115,19 @@ c_lfiles_new
 	return (link);
 }
 
-/* struct lfiles_s* */
-/* c_lfiles_duplicate(struct lfiles_s** head) */
-/* { */
-/*     struct lfiles_s* dup; */
-/*     struct lfiles_s* origin; */
-/*  */
-/*     if (head == NULL) { */
-/*         return (NULL); */
-/*     } */
-/* } */
+struct lfiles_s*
+c_lfiles_duplicate(struct lfiles_s** head)
+{
+	struct lfiles_s* dup_head;
+	struct lfiles_s* dup_link;
+	struct lfiles_s* origin;
+
+	if (*head == NULL) {
+		return (NULL);
+	}
+	origin = *head;
+	return (dup_head);
+}
 
 struct lfiles_s*
 c_lfiles_gather(void)
@@ -147,6 +150,12 @@ c_lfiles_gather(void)
 		return (NULL);
 	}
 	while ((dp = readdir(dirp)) != NULL) {
+		if (
+			strncmp(dp->d_name, ".", 2 * sizeof(char)) == 0 ||
+			strncmp(dp->d_name, "..", 3 * sizeof(char)) == 0
+		) {
+			continue;
+		}
 		link = c_lfiles_new(dp->d_name, dp->d_type);
 		if (link == NULL) {
 			u_dump_errno();
