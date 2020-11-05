@@ -43,11 +43,25 @@
  * 2020-11-05 19:27
  */
 
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 void
 u_memdel(void** ptr)
 {
 	free(*ptr);
 	*ptr = NULL;
+}
+
+void
+u_dump_errno(void)
+{
+	dprintf(
+		STDERR_FILENO,
+		"unixize: %s\n",
+		strerror(errno)
+	);
 }

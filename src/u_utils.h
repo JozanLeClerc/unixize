@@ -44,3 +44,4 @@
  */
 
 void	u_memdel(void**);
+void	u_dump_errno(void);

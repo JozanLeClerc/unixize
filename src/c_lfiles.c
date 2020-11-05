@@ -138,30 +138,18 @@ c_lfiles_gather(void)
 	head = NULL;
 	link = NULL;
 	if (getcwd(path, MAXPATHLEN) == NULL) {
-		dprintf(
-			STDERR_FILENO,
-			"unixize: %s\n",
-			strerror(errno)
-		);
+		u_dump_errno();
 		return (NULL);
 	}
 	dirp = opendir(path);
 	if (dirp == NULL) {
-		dprintf(
-			STDERR_FILENO,
-			"unixize: %s\n",
-			strerror(errno)
-		);
+		u_dump_errno();
 		return (NULL);
 	}
 	while ((dp = readdir(dirp)) != NULL) {
 		link = c_lfiles_new(dp->d_name, dp->d_type);
 		if (link == NULL) {
-			dprintf(
-					STDERR_FILENO,
-					"unixize: %s\n",
-					strerror(errno)
-				   );
+			u_dump_errno();
 			c_lfiles_clear(&link);
 			return (NULL);
 		}

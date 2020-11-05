@@ -53,6 +53,7 @@
 
 #include "c_lfiles.h"
 #include "c_opts.h"
+#include "u_utils.h"
 
 int
 main
@@ -65,11 +66,7 @@ main
 
 	c_get_opts(&opts, argc, argv);
 	if (chdir((const char*)opts.dir) == -1) {
-		dprintf(
-			STDERR_FILENO,
-			"unixize: %s\n",
-			strerror(errno)
-		);
+		u_dump_err();
 		return (1);
 	}
 	og_files = c_lfiles_gather();
