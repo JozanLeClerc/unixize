@@ -49,7 +49,7 @@
 #include "c_unixize.h"
 
 void	c_lfiles_clear(struct lfiles_s**);
-/* struct lfiles_s* c_lfiles_duplicate(struct lfiles_s*); */
+struct lfiles_s* c_lfiles_duplicate(struct lfiles_s**);
 struct lfiles_s* c_lfiles_gather(void);
 
 #endif /* end of include guard: __C_LFILES_H__ */

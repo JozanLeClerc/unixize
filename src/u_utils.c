@@ -65,3 +65,14 @@ u_dump_errno(void)
 		strerror(errno)
 	);
 }
+
+void
+u_dump_errno_path(const char path[])
+{
+	dprintf(
+		STDERR_FILENO,
+		"unixize: %s: %s\n",
+		path,
+		strerror(errno)
+	);
+}

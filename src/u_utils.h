@@ -45,3 +45,4 @@
 
 void	u_memdel(void**);
 void	u_dump_errno(void);
+void	u_dump_errno_path(const char[]);

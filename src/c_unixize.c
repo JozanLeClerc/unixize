@@ -45,6 +45,7 @@
  * This is the main function and entrypoint of the program.
  */
 
+#include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -63,19 +64,60 @@ main
 	struct opts_s opts;
 	struct lfiles_s* og_files;
 	struct lfiles_s* new_files;
+	struct lfiles_s* og_files_head;
+	struct lfiles_s* new_files_head;
+	char rargv[8][3];
+	char i;
 
 	c_get_opts(&opts, argc, argv);
 	if (chdir((const char*)opts.dir) == -1) {
-		u_dump_errno();
+		u_dump_errno_path(opts.dir);
 		return (1);
 	}
 	og_files = c_lfiles_gather();
-	new_files = c_lfiles_duplicate(og_files);
 	if (og_files == NULL) {
+		return (0);
+	}
+	new_files = c_lfiles_duplicate(&og_files);
+	if (og_files == NULL) {
+		c_lfiles_clear(&og_files);
 		return (1);
 	}
-	c_lfiles_clear(&og_files);
-	c_lfiles_clear(&new_files);
+	/* c_subst(&opts, og_files); */
+	og_files_head = og_files;
+	new_files_head = new_files;
+	while (og_files != NULL && new_files != NULL) {
+		if (opts.hidden == FALSE && og_files->filename[0] == '.') {
+			og_files = og_files->next;
+			new_files = new_files->next;
+			continue;
+		}
+		printf("'%s' -> '%s'\n", og_files->filename, new_files->filename);
+		if (opts.recursive == TRUE && og_files->filetype == DT_DIR) {
+			if (chdir((const char*)og_files->filename) == -1) {
+				u_dump_errno_path(og_files->filename);
+			}
+			else {
+				i = 1;
+				strlcpy(rargv[0], "-R", 3 * sizeof(char));
+				if (opts.hidden == TRUE) {
+					strlcpy(rargv[i], "-a", 3 * sizeof(char));
+					i++;
+				}
+				if (opts.hyphen == TRUE) {
+					strlcpy(rargv[i], "-n", 3 * sizeof(char));
+					i++;
+				}
+				main();
+				chdir("../");
+			}
+		}
+		/* rename(); */
+		og_files = og_files->next;
+		new_files = new_files->next;
+	}
+	c_lfiles_clear(&og_files_head);
+	c_lfiles_clear(&new_files_head);
 	return (0);
 }
 
@@ -83,4 +125,5 @@ main
  * Files prefixes index
  * --------------------
  * c_  -> core program related
+ * u_  -> utils related
  */

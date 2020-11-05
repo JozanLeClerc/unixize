@@ -122,10 +122,20 @@ c_lfiles_duplicate(struct lfiles_s** head)
 	struct lfiles_s* dup_link;
 	struct lfiles_s* origin;
 
-	if (*head == NULL) {
+	dup_head = NULL;
+	if (head == NULL) {
 		return (NULL);
 	}
 	origin = *head;
+	while (origin != NULL) {
+		dup_link = c_lfiles_new(origin->filename, origin->filetype);
+		if (dup_link == NULL) {
+			u_dump_errno();
+			return (NULL);
+		}
+		origin = origin->next;
+		c_lfiles_add_back(&dup_head, dup_link);
+	}
 	return (dup_head);
 }
 
@@ -136,15 +146,10 @@ c_lfiles_gather(void)
 	struct dirent* dp;
 	struct lfiles_s* head;
 	struct lfiles_s* link;
-	char path[MAXPATHLEN];
 
 	head = NULL;
 	link = NULL;
-	if (getcwd(path, MAXPATHLEN) == NULL) {
-		u_dump_errno();
-		return (NULL);
-	}
-	dirp = opendir(path);
+	dirp = opendir(".");
 	if (dirp == NULL) {
 		u_dump_errno();
 		return (NULL);
