@@ -13,7 +13,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Copyright (c) 2020 Joe
+ * Copyright © 2020 Joe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,105 +38,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * unixize: src/c_opts.c
- * 2020-11-02 23:37
+ * unixize: src/c_lfiles.h
+ * 2020-11-05 18:06
  * Joe
- *
- * This is where we handle command line options.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#ifndef __C_LFILES_H__
+#define __C_LFILES_H__
 
-#include "c_opts.h"
 #include "c_unixize.h"
 
-static void
-c_dump_usage(void)
-{
-	dprintf(
-		STDERR_FILENO,
-		C_USAGE_FMT,
-		C_OPTS
-	);
-}
+void	c_lfiles_clear(struct lfiles_s**);
+/* struct lfiles_s* c_lfiles_duplicate(struct lfiles_s*); */
+struct lfiles_s* c_lfiles_gather(void);
 
-static void
-c_ask_confirm(const char dir[])
-{
-	char c;
-
-	if (strncmp(dir, ".", 2 * sizeof(char)) == 0) {
-		printf("unixize current directory? (y/n [n]) ");
-	}
-	else {
-		printf("unixize %s? (y/n [n]) ", dir);
-	}
-	scanf("%c", &c);
-	if (c != 'y' && c != 'Y') {
-		printf("not unixized\n");
-		exit(0);
-	}
-}
-
-void
-c_get_opts
-(struct opts_s*	opts,
- int			argc,
- const char*	argv[])
-{
-	int opt;
-	bool_t confirm;
-
-	opts->recursive = FALSE;
-	opts->verbose = FALSE;
-	opts->pretend = FALSE;
-	opts->hidden = FALSE;
-	opts->hyphen = FALSE;
-	confirm = FALSE;
-	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
-		if (opt == 'a') {
-			opts->hidden = TRUE;
-		}
-		else if (opt == 'h') {
-			c_dump_usage();
-			exit(0);
-		}
-		else if (opt == 'i') {
-			confirm = TRUE;
-		}
-		else if (opt == 'n') {
-			opts->hyphen = TRUE;
-		}
-		else if (opt == 'p') {
-			opts->pretend = TRUE;
-		}
-		else if (opt == 'R') {
-			opts->recursive = TRUE;
-		}
-		else if (opt == 'v') {
-			opts->verbose = TRUE;
-		}
-		else if (opt == '?') {
-			c_dump_usage();
-			exit(1);
-		}
-	}
-	if (optind < argc && argv[optind] != NULL) {
-		strncpy(opts->dir, argv[optind], PATH_MAX);
-		if (opts->dir[strlen(opts->dir) - 1] == '/') {
-			opts->dir[strlen(opts->dir) - 1] = 0x00;
-		}
-	}
-	else if (argv[optind] == NULL) {
-		strncpy(opts->dir, ".", 2 * sizeof(char));
-	}
-	if (confirm == TRUE) {
-		c_ask_confirm(opts->dir);
-	}
-	if (opts->pretend == TRUE) {
-		opts->verbose = TRUE;
-	}
-}
+#endif /* end of include guard: __C_LFILES_H__ */

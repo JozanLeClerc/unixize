@@ -13,7 +13,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Copyright (c) 2020 Joe
+ * Copyright © 2020 Joe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,105 +38,124 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * unixize: src/c_opts.c
- * 2020-11-02 23:37
+ * unixize: src/c_lfiles.c
+ * 2020-11-05 18:05
  * Joe
  *
- * This is where we handle command line options.
+ * In this files are functions to handle the files linked list.
  */
 
+#include <dirent.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "c_opts.h"
 #include "c_unixize.h"
+#include "u_utils.h"
 
 static void
-c_dump_usage(void)
+c_lfiles_add_back
+(struct lfiles_s**	head,
+ struct lfiles_s*	new)
 {
-	dprintf(
-		STDERR_FILENO,
-		C_USAGE_FMT,
-		C_OPTS
-	);
-}
+	struct lfiles_s* tmp;
 
-static void
-c_ask_confirm(const char dir[])
-{
-	char c;
-
-	if (strncmp(dir, ".", 2 * sizeof(char)) == 0) {
-		printf("unixize current directory? (y/n [n]) ");
+	if (*head == NULL) {
+		*head = new;
+		return;
 	}
-	else {
-		printf("unixize %s? (y/n [n]) ", dir);
+	tmp = *head;
+	while (tmp->next != NULL) {
+		tmp = tmp->next;
 	}
-	scanf("%c", &c);
-	if (c != 'y' && c != 'Y') {
-		printf("not unixized\n");
-		exit(0);
-	}
+	tmp->next = new;
 }
 
 void
-c_get_opts
-(struct opts_s*	opts,
- int			argc,
- const char*	argv[])
+c_lfiles_clear(struct lfiles_s** head)
 {
-	int opt;
-	bool_t confirm;
+	struct lfiles_s* renext;
+	struct lfiles_s* tmp;
 
-	opts->recursive = FALSE;
-	opts->verbose = FALSE;
-	opts->pretend = FALSE;
-	opts->hidden = FALSE;
-	opts->hyphen = FALSE;
-	confirm = FALSE;
-	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
-		if (opt == 'a') {
-			opts->hidden = TRUE;
-		}
-		else if (opt == 'h') {
-			c_dump_usage();
-			exit(0);
-		}
-		else if (opt == 'i') {
-			confirm = TRUE;
-		}
-		else if (opt == 'n') {
-			opts->hyphen = TRUE;
-		}
-		else if (opt == 'p') {
-			opts->pretend = TRUE;
-		}
-		else if (opt == 'R') {
-			opts->recursive = TRUE;
-		}
-		else if (opt == 'v') {
-			opts->verbose = TRUE;
-		}
-		else if (opt == '?') {
-			c_dump_usage();
-			exit(1);
-		}
+	if (head == NULL) {
+		return;
 	}
-	if (optind < argc && argv[optind] != NULL) {
-		strncpy(opts->dir, argv[optind], PATH_MAX);
-		if (opts->dir[strlen(opts->dir) - 1] == '/') {
-			opts->dir[strlen(opts->dir) - 1] = 0x00;
+	tmp = *head;
+	while (tmp != NULL) {
+		renext = tmp->next;
+		u_memdel((void*)&tmp->filename);
+		u_memdel((void*)&tmp);
+		tmp = renext;
+	}
+	*head = NULL;
+}
+
+static struct lfiles_s*
+c_lfiles_new
+(const char		filename[],
+ unsigned char	filetype)
+{
+	struct lfiles_s* link;
+
+	link = (struct lfiles_s*)malloc(sizeof(struct lfiles_s*));
+	if (link == NULL) {
+		return (NULL);
+	}
+	link->filename = strdup(filename);
+	link->filetype = filetype;
+	if (link->filename == NULL) {
+		u_memdel((void*)&link);
+		return (NULL);
+	}
+	link->next = NULL;
+	return (link);
+}
+
+/* struct lfiles_s* */
+/* c_lfiles_duplicate(struct lfiles_s** head) */
+/* { */
+/*     struct lfiles_s* dup; */
+/*     struct lfiles_s* origin; */
+/*  */
+/*     if (head == NULL) { */
+/*         return (NULL); */
+/*     } */
+/* } */
+
+struct lfiles_s*
+c_lfiles_gather(void)
+{
+	DIR* dirp;
+	struct dirent* dp;
+	struct lfiles_s* head;
+	struct lfiles_s* link;
+
+	head = NULL;
+	link = NULL;
+	dirp = opendir(".");
+	if (dirp == NULL) {
+		dprintf(
+			STDERR_FILENO,
+			"unixize: %s\n",
+			strerror(errno)
+		);
+		return (NULL);
+	}
+	while ((dp = readdir(dirp)) != NULL) {
+		link = c_lfiles_new(dp->d_name, dp->d_type);
+		if (link == NULL) {
+			dprintf(
+					STDERR_FILENO,
+					"unixize: %s\n",
+					strerror(errno)
+				   );
+			c_lfiles_clear(&link);
+			return (NULL);
 		}
+		c_lfiles_add_back(&head, link);
 	}
-	else if (argv[optind] == NULL) {
-		strncpy(opts->dir, ".", 2 * sizeof(char));
-	}
-	if (confirm == TRUE) {
-		c_ask_confirm(opts->dir);
-	}
-	if (opts->pretend == TRUE) {
-		opts->verbose = TRUE;
-	}
+	closedir(dirp);
+	return (head);
 }

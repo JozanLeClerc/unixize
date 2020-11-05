@@ -51,6 +51,6 @@
 #define C_OPTS		"ahinpRv"
 #define C_USAGE_FMT	"usage: unixize [-%s] [directory]\n"
 
-void c_get_opts(struct opts_s*, int, const char*[]);
+void	c_get_opts(struct opts_s*, int, const char*[]);
 
 #endif /* ifndef __C_OPTS_H__ */

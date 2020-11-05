@@ -66,6 +66,10 @@ struct opts_s {
 	char	dir[PATH_MAX];
 };
 
-void c_init(struct opts_s*);
+struct lfiles_s {
+	struct lfiles_s*	next;
+	char*				filename;
+	unsigned char		filetype;
+};
 
 #endif /* ifndef __C_UNIXIZE_H__ */

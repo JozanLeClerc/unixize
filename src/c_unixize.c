@@ -45,22 +45,29 @@
  * This is the main function and entrypoint of the program.
  */
 
+#include <stdio.h>
+#include <stddef.h>
+
+#include "c_lfiles.h"
 #include "c_opts.h"
 
-void
-c_init(struct opts_s* opts)
-{
-	(void)opts;
-}
-
 int
-main(int			argc,
-	 const char*	argv[])
+main
+(int			argc,
+ const char*	argv[])
 {
 	struct opts_s opts;
+	struct lfiles_s* files;
 
 	c_get_opts(&opts, argc, argv);
-	c_init(&opts);
+	files = c_lfiles_gather();
+	if (files == NULL) {
+		return (1);
+	}
+	while (files != NULL) {
+		printf("'%s' - %hhu\n", files->filename, files->filetype);
+		files = files->next;
+	}
 	return (0);
 }
 
