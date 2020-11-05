@@ -66,8 +66,8 @@ main
 	struct lfiles_s* new_files;
 	struct lfiles_s* og_files_head;
 	struct lfiles_s* new_files_head;
-	char rargv[8][3];
-	char i;
+	int nargc;
+	char* nargv;
 
 	c_get_opts(&opts, argc, argv);
 	if (chdir((const char*)opts.dir) == -1) {
@@ -92,26 +92,17 @@ main
 			new_files = new_files->next;
 			continue;
 		}
-		printf("'%s' -> '%s'\n", og_files->filename, new_files->filename);
 		if (opts.recursive == TRUE && og_files->filetype == DT_DIR) {
 			if (chdir((const char*)og_files->filename) == -1) {
 				u_dump_errno_path(og_files->filename);
 			}
 			else {
-				i = 1;
-				strlcpy(rargv[0], "-R", 3 * sizeof(char));
-				if (opts.hidden == TRUE) {
-					strlcpy(rargv[i], "-a", 3 * sizeof(char));
-					i++;
-				}
-				if (opts.hyphen == TRUE) {
-					strlcpy(rargv[i], "-n", 3 * sizeof(char));
-					i++;
-				}
-				main();
+				/* rargc = u_get_rargv(&opts); */
+				main(nargc, (const char**)nargv);
 				chdir("../");
 			}
 		}
+		printf("'%s' -> '%s'\n", og_files->filename, new_files->filename);
 		/* rename(); */
 		og_files = og_files->next;
 		new_files = new_files->next;
