@@ -45,6 +45,8 @@
  * In this files are functions to handle the files linked list.
  */
 
+#include <sys/param.h>
+
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
@@ -99,16 +101,16 @@ c_lfiles_new
 {
 	struct lfiles_s* link;
 
-	link = (struct lfiles_s*)malloc(sizeof(struct lfiles_s*));
+	link = (struct lfiles_s*)malloc(sizeof(struct lfiles_s));
 	if (link == NULL) {
 		return (NULL);
 	}
 	link->filename = strdup(filename);
-	link->filetype = filetype;
 	if (link->filename == NULL) {
 		u_memdel((void*)&link);
 		return (NULL);
 	}
+	link->filetype = filetype;
 	link->next = NULL;
 	return (link);
 }
@@ -131,10 +133,19 @@ c_lfiles_gather(void)
 	struct dirent* dp;
 	struct lfiles_s* head;
 	struct lfiles_s* link;
+	char path[MAXPATHLEN];
 
 	head = NULL;
 	link = NULL;
-	dirp = opendir(".");
+	if (getcwd(path, MAXPATHLEN) == NULL) {
+		dprintf(
+			STDERR_FILENO,
+			"unixize: %s\n",
+			strerror(errno)
+		);
+		return (NULL);
+	}
+	dirp = opendir(path);
 	if (dirp == NULL) {
 		dprintf(
 			STDERR_FILENO,

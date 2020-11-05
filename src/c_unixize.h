@@ -46,11 +46,7 @@
 #ifndef __C_UNIXIZE_H__
 #define __C_UNIXIZE_H__
 
-#ifdef __linux__
-#include <linux/limits.h>
-#else
-#include <limits.h>
-#endif
+#include <sys/param.h>
 
 typedef enum bool_e {
 	FALSE,
@@ -63,7 +59,7 @@ struct opts_s {
 	bool_t	pretend;
 	bool_t	recursive;
 	bool_t	verbose;
-	char	dir[PATH_MAX];
+	char	dir[MAXPATHLEN];
 };
 
 struct lfiles_s {

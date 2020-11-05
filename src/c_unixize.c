@@ -45,8 +45,11 @@
  * This is the main function and entrypoint of the program.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "c_lfiles.h"
 #include "c_opts.h"
@@ -57,17 +60,25 @@ main
  const char*	argv[])
 {
 	struct opts_s opts;
-	struct lfiles_s* files;
+	struct lfiles_s* og_files;
+	struct lfiles_s* new_files;
 
 	c_get_opts(&opts, argc, argv);
-	files = c_lfiles_gather();
-	if (files == NULL) {
+	if (chdir((const char*)opts.dir) == -1) {
+		dprintf(
+			STDERR_FILENO,
+			"unixize: %s\n",
+			strerror(errno)
+		);
 		return (1);
 	}
-	while (files != NULL) {
-		printf("'%s' - %hhu\n", files->filename, files->filetype);
-		files = files->next;
+	og_files = c_lfiles_gather();
+	new_files = c_lfiles_duplicate(og_files);
+	if (og_files == NULL) {
+		return (1);
 	}
+	c_lfiles_clear(&og_files);
+	c_lfiles_clear(&new_files);
 	return (0);
 }
 

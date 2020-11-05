@@ -16,7 +16,7 @@
 #
 # GNU Makefile
 
-.DEFAULT_GOAL	:= msan
+.DEFAULT_GOAL	:= asan
 SHELL			:= /bin/sh
 
 DESTDIR			 = /usr/local
