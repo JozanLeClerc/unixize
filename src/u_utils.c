@@ -107,7 +107,7 @@ u_get_extra_args(char args[], struct opts_s* opts)
 		i++;
 	}
 	if (i > 0) {
-		*(args + ((i - 2) * 3) - 1) = 0x00;
+		*(args + (i * 3) - 1) = 0x00;
 	}
 	return (i);
 }
@@ -119,8 +119,10 @@ u_del_nargv(char** nargv)
 
 	ptr = nargv;
 	while (*ptr != NULL) {
+		u_memdel((void*)&nargv[ptr - nargv]);
 		ptr++;
 	}
+	u_memdel((void*)&nargv);
 }
 
 char**
@@ -151,17 +153,17 @@ u_get_nargv(struct opts_s* opts)
 		return (NULL);
 	}
 	if (i > 2) {
-		i = 2;
 		tok = strtok(args, ":");
-		nargv[i] = strdup(tok);
-		if (nargv[i] == NULL) {
+		nargv[3] = strdup(tok);
+		if (nargv[3] == NULL) {
 			u_del_nargv(nargv);
 			return (NULL);
 		}
-		nargv[i + 1] = NULL;
+		nargv[4] = NULL;
+		i = 4;
 		while ((tok = strtok(NULL, ":")) != NULL) {
 			nargv[i] = strdup(tok);
-			if (nargv[i] == NULL) {
+			if (nargv[i] != NULL) {
 				u_del_nargv(nargv);
 				return (NULL);
 			}
@@ -169,6 +171,5 @@ u_get_nargv(struct opts_s* opts)
 			i++;
 		}
 	}
-	exit(0);
 	return (nargv);
 }

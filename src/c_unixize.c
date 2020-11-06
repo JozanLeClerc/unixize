@@ -62,11 +62,11 @@ main
 (int			argc,
  const char*	argv[])
 {
-	struct opts_s opts;
 	struct lfiles_s* og_files;
 	struct lfiles_s* new_files;
 	struct lfiles_s* og_files_head;
 	struct lfiles_s* new_files_head;
+	struct opts_s opts;
 	int nargc;
 	char** nargv;
 
@@ -109,7 +109,7 @@ main
 				chdir("../");
 			}
 		}
-		printf("'%s' -> '%s'\n", og_files->filename, new_files->filename);
+		/* printf("'%s' -> '%s'\n", og_files->filename, new_files->filename); */
 		/* rename(); */
 		og_files = og_files->next;
 		new_files = new_files->next;

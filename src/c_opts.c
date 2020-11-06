@@ -69,14 +69,14 @@ c_ask_confirm(const char dir[])
 	char c;
 
 	if (strncmp(dir, ".", 2 * sizeof(char)) == 0) {
-		printf("unixize current directory? (y/n [n]) ");
+		dprintf(STDERR_FILENO, "unixize current directory? (y/n [n]) ");
 	}
 	else {
-		printf("unixize %s? (y/n [n]) ", dir);
+		dprintf(STDERR_FILENO, "unixize %s? (y/n [n]) ", dir);
 	}
 	scanf("%c", &c);
 	if (c != 'y' && c != 'Y') {
-		printf("not unixized\n");
+		dprintf(STDERR_FILENO, "not unixized\n");
 		exit(0);
 	}
 }
