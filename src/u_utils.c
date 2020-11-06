@@ -155,7 +155,7 @@ u_get_nargv(struct opts_s* opts)
 		u_memdel((void*)&nargv);
 		return (NULL);
 	}
-	if (i <= 3) {
+	if (i < 3) {
 		return (nargv);
 	}
 	tok = strtok(args, ":");

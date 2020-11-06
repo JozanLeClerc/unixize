@@ -99,8 +99,7 @@ c_recursive_parse
 {
 	char** ptr;
 
-	ptr = (char**)argv;
-	ptr++;
+	ptr = (char**)argv + 1;
 	while (*ptr != NULL) {
 		if ((*ptr)[1] == 'a') {
 			opts->hidden = TRUE;
