@@ -101,15 +101,23 @@ main
 				nargv = u_get_nargv(&opts);
 				if (nargv != NULL) {
 					nargc = 0;
-					while (argv[nargc] != NULL) {
+					while (argv[nargc + 1] != NULL) {
 						nargc++;
 					}
 					main(nargc, (const char**)nargv);
+					u_del_nargv(nargv);
 				}
 				chdir("../");
 			}
 		}
-		/* printf("'%s' -> '%s'\n", og_files->filename, new_files->filename); */
+		if (opts.verbose == TRUE) {
+			dprintf(
+				STDOUT_FILENO,
+				"'%s' -> '%s'\n",
+				og_files->filename,
+				new_files->filename
+		   );
+		}
 		/* rename(); */
 		og_files = og_files->next;
 		new_files = new_files->next;

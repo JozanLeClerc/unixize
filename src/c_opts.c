@@ -45,6 +45,8 @@
  * This is where we handle command line options.
  */
 
+#include <sys/param.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -52,6 +54,7 @@
 
 #include "c_opts.h"
 #include "c_unixize.h"
+#include "u_utils.h"
 
 static void
 c_dump_usage(void)
@@ -64,15 +67,17 @@ c_dump_usage(void)
 }
 
 static void
-c_ask_confirm(const char dir[])
+c_prompt_confirm(void)
 {
 	char c;
+	char path[MAXPATHLEN];
 
-	if (strncmp(dir, ".", 2 * sizeof(char)) == 0) {
+	if (getcwd(path, MAXPATHLEN) == NULL) {
+		u_dump_errno();
 		dprintf(STDERR_FILENO, "unixize current directory? (y/n [n]) ");
 	}
 	else {
-		dprintf(STDERR_FILENO, "unixize %s? (y/n [n]) ", dir);
+		dprintf(STDERR_FILENO, "unixize %s? (y/n [n]) ", path);
 	}
 	scanf("%c", &c);
 	if (c != 'y' && c != 'Y') {
@@ -95,9 +100,13 @@ c_get_opts
 	opts->pretend = FALSE;
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
-	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
+	while (
+			argv[0][0] != 'r' &&
+			(opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1
+		) {
 		if (opt == 'a') {
 			opts->hidden = TRUE;
+			printf("hidden\n");
 		}
 		else if (opt == 'h') {
 			c_dump_usage();
@@ -105,35 +114,40 @@ c_get_opts
 		}
 		else if (opt == 'i') {
 			opts->confirm = TRUE;
+			printf("confirm\n");
 		}
 		else if (opt == 'n') {
 			opts->hyphen = TRUE;
+			printf("hyphen\n");
 		}
 		else if (opt == 'p') {
 			opts->pretend = TRUE;
+			printf("pretend\n");
 		}
 		else if (opt == 'R') {
 			opts->recursive = TRUE;
+			printf("recursive\n");
 		}
 		else if (opt == 'v') {
 			opts->verbose = TRUE;
+			printf("verbose\n");
 		}
 		else if (opt == '?') {
 			c_dump_usage();
 			exit(1);
 		}
 	}
-	if (optind < argc && argv[optind] != NULL) {
+	if (argv[0][0] != 'r' && optind < argc && argv[optind] != NULL) {
 		strncpy(opts->dir, argv[optind], PATH_MAX);
 		if (opts->dir[strlen(opts->dir) - 1] == '/') {
 			opts->dir[strlen(opts->dir) - 1] = 0x00;
 		}
 	}
-	else if (argv[optind] == NULL) {
-		strncpy(opts->dir, ".", 2 * sizeof(char));
+	else if (argv[0][0] == 'r' || argv[optind] == NULL) {
+		strlcpy(opts->dir, ".", 2 * sizeof(char));
 	}
 	if (opts->confirm == TRUE) {
-		c_ask_confirm(opts->dir);
+		c_prompt_confirm();
 	}
 	if (opts->pretend == TRUE) {
 		opts->verbose = TRUE;

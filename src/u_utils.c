@@ -79,6 +79,19 @@ u_dump_errno_path(const char path[])
 	);
 }
 
+void
+u_del_nargv(char** nargv)
+{
+	char** ptr;
+
+	ptr = nargv;
+	while (*ptr != NULL) {
+		u_memdel((void*)&nargv[ptr - nargv]);
+		ptr++;
+	}
+	u_memdel((void*)&nargv);
+}
+
 static char
 u_get_extra_args(char args[], struct opts_s* opts)
 {
@@ -112,19 +125,6 @@ u_get_extra_args(char args[], struct opts_s* opts)
 	return (i);
 }
 
-static void
-u_del_nargv(char** nargv)
-{
-	char** ptr;
-
-	ptr = nargv;
-	while (*ptr != NULL) {
-		u_memdel((void*)&nargv[ptr - nargv]);
-		ptr++;
-	}
-	u_memdel((void*)&nargv);
-}
-
 char**
 u_get_nargv(struct opts_s* opts)
 {
@@ -134,12 +134,12 @@ u_get_nargv(struct opts_s* opts)
 	char* tok;
 
 	i = u_get_extra_args(args, opts) + 2;
-	nargv = (char**)malloc((i + 1) * sizeof(char*));
+	nargv = (char**)malloc((i + 2) * sizeof(char*));
 	if (nargv == NULL) {
 		u_dump_errno();
 		return (NULL);
 	}
-	nargv[0] = strdup("unixize");
+	nargv[0] = strdup("r");
 	nargv[1] = NULL;
 	if (nargv[0] == NULL) {
 		u_memdel((void*)&nargv);
@@ -152,24 +152,25 @@ u_get_nargv(struct opts_s* opts)
 		u_memdel((void*)&nargv);
 		return (NULL);
 	}
-	if (i > 2) {
-		tok = strtok(args, ":");
-		nargv[3] = strdup(tok);
-		if (nargv[3] == NULL) {
+	if (i <= 3) {
+		return (nargv);
+	}
+	tok = strtok(args, ":");
+	nargv[2] = strdup(tok);
+	if (nargv[2] == NULL) {
+		u_del_nargv(nargv);
+		return (NULL);
+	}
+	nargv[3] = NULL;
+	i = 3;
+	while ((tok = strtok(NULL, ":")) != NULL) {
+		nargv[i] = strdup(tok);
+		if (nargv[i] == NULL) {
 			u_del_nargv(nargv);
 			return (NULL);
 		}
-		nargv[4] = NULL;
-		i = 4;
-		while ((tok = strtok(NULL, ":")) != NULL) {
-			nargv[i] = strdup(tok);
-			if (nargv[i] != NULL) {
-				u_del_nargv(nargv);
-				return (NULL);
-			}
-			nargv[i + 1] = NULL;
-			i++;
-		}
+		nargv[i + 1] = NULL;
+		i++;
 	}
 	return (nargv);
 }

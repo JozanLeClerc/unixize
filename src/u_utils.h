@@ -48,4 +48,5 @@
 void	u_memdel(void**);
 void	u_dump_errno(void);
 void	u_dump_errno_path(const char[]);
+void	u_del_nargv(char** nargv);
 char**	u_get_nargv(struct opts_s*);
