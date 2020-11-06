@@ -1,5 +1,6 @@
 #+TITLE: TODO list for unixize
 
+* TODO subst
 * TODO remove malloc for recursive main [0/2]
   - [ ] Remove them / go stack
   - [ ] Check "= \0" int c_opts.c:c_recursive_parse
