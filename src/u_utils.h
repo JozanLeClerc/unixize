@@ -43,6 +43,9 @@
  * 2020-11-05 19:28
  */
 
+#include "c_unixize.h"
+
 void	u_memdel(void**);
 void	u_dump_errno(void);
 void	u_dump_errno_path(const char[]);
+char**	u_get_nargv(struct opts_s*);

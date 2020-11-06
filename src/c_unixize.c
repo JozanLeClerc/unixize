@@ -54,6 +54,7 @@
 
 #include "c_lfiles.h"
 #include "c_opts.h"
+#include "c_unixize.h"
 #include "u_utils.h"
 
 int
@@ -67,7 +68,7 @@ main
 	struct lfiles_s* og_files_head;
 	struct lfiles_s* new_files_head;
 	int nargc;
-	char* nargv;
+	char** nargv;
 
 	c_get_opts(&opts, argc, argv);
 	if (chdir((const char*)opts.dir) == -1) {
@@ -97,8 +98,14 @@ main
 				u_dump_errno_path(og_files->filename);
 			}
 			else {
-				/* rargc = u_get_rargv(&opts); */
-				main(nargc, (const char**)nargv);
+				nargv = u_get_nargv(&opts);
+				if (nargv != NULL) {
+					nargc = 0;
+					while (argv[nargc] != NULL) {
+						nargc++;
+					}
+					main(nargc, (const char**)nargv);
+				}
 				chdir("../");
 			}
 		}

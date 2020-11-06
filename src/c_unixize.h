@@ -48,12 +48,15 @@
 
 #include <sys/param.h>
 
-typedef enum bool_e {
+typedef unsigned char bool_t;
+
+enum bool_e {
 	FALSE,
 	TRUE
-} bool_t;
+};
 
 struct opts_s {
+	bool_t	confirm;
 	bool_t	hidden;
 	bool_t	hyphen;
 	bool_t	pretend;

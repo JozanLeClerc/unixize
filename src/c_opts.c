@@ -88,14 +88,13 @@ c_get_opts
  const char*	argv[])
 {
 	int opt;
-	bool_t confirm;
 
-	opts->recursive = FALSE;
-	opts->verbose = FALSE;
-	opts->pretend = FALSE;
+	opts->confirm = FALSE;
 	opts->hidden = FALSE;
 	opts->hyphen = FALSE;
-	confirm = FALSE;
+	opts->pretend = FALSE;
+	opts->recursive = FALSE;
+	opts->verbose = FALSE;
 	while ((opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1) {
 		if (opt == 'a') {
 			opts->hidden = TRUE;
@@ -105,7 +104,7 @@ c_get_opts
 			exit(0);
 		}
 		else if (opt == 'i') {
-			confirm = TRUE;
+			opts->confirm = TRUE;
 		}
 		else if (opt == 'n') {
 			opts->hyphen = TRUE;
@@ -133,7 +132,7 @@ c_get_opts
 	else if (argv[optind] == NULL) {
 		strncpy(opts->dir, ".", 2 * sizeof(char));
 	}
-	if (confirm == TRUE) {
+	if (opts->confirm == TRUE) {
 		c_ask_confirm(opts->dir);
 	}
 	if (opts->pretend == TRUE) {

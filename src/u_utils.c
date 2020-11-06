@@ -49,6 +49,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "c_unixize.h"
+
 void
 u_memdel(void** ptr)
 {
@@ -75,4 +77,98 @@ u_dump_errno_path(const char path[])
 		path,
 		strerror(errno)
 	);
+}
+
+static char
+u_get_extra_args(char args[], struct opts_s* opts)
+{
+	char i;
+
+	i = 0;
+	args[0] = 0x00;
+	if (opts->hidden == TRUE) {
+		memcpy((char*)args + (i * 3), "-a:", 4 * sizeof(char));
+		i++;
+	}
+	if (opts->confirm == TRUE) {
+		memcpy((char*)args + (i * 3), "-i:", 4 * sizeof(char));
+		i++;
+	}
+	if (opts->hyphen == TRUE) {
+		memcpy((char*)args + (i * 3), "-n:", 4 * sizeof(char));
+		i++;
+	}
+	if (opts->pretend == TRUE) {
+		memcpy((char*)args + (i * 3), "-p:", 4 * sizeof(char));
+		i++;
+	}
+	if (opts->verbose == TRUE) {
+		memcpy((char*)args + (i * 3), "-v:", 4 * sizeof(char));
+		i++;
+	}
+	if (i > 0) {
+		*(args + ((i - 2) * 3) - 1) = 0x00;
+	}
+	return (i);
+}
+
+static void
+u_del_nargv(char** nargv)
+{
+	char** ptr;
+
+	ptr = nargv;
+	while (*ptr != NULL) {
+		ptr++;
+	}
+}
+
+char**
+u_get_nargv(struct opts_s* opts)
+{
+	short i;
+	char args[19];
+	char** nargv;
+	char* tok;
+
+	i = u_get_extra_args(args, opts) + 2;
+	nargv = (char**)malloc((i + 1) * sizeof(char*));
+	if (nargv == NULL) {
+		u_dump_errno();
+		return (NULL);
+	}
+	nargv[0] = strdup("unixize");
+	nargv[1] = NULL;
+	if (nargv[0] == NULL) {
+		u_memdel((void*)&nargv);
+		return (NULL);
+	}
+	nargv[1] = strdup("-R");
+	nargv[2] = NULL;
+	if (nargv[1] == NULL) {
+		u_memdel((void*)&nargv[0]);
+		u_memdel((void*)&nargv);
+		return (NULL);
+	}
+	if (i > 2) {
+		i = 2;
+		tok = strtok(args, ":");
+		nargv[i] = strdup(tok);
+		if (nargv[i] == NULL) {
+			u_del_nargv(nargv);
+			return (NULL);
+		}
+		nargv[i + 1] = NULL;
+		while ((tok = strtok(NULL, ":")) != NULL) {
+			nargv[i] = strdup(tok);
+			if (nargv[i] == NULL) {
+				u_del_nargv(nargv);
+				return (NULL);
+			}
+			nargv[i + 1] = NULL;
+			i++;
+		}
+	}
+	exit(0);
+	return (nargv);
 }
