@@ -70,7 +70,9 @@ main
 	int nargc;
 	char** nargv;
 
-	c_get_opts(&opts, argc, argv);
+	if (c_get_opts(&opts, argc, argv) == FALSE) {
+		return (0);
+	}
 	if (chdir((const char*)opts.dir) == -1) {
 		u_dump_errno_path(opts.dir);
 		return (1);

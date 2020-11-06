@@ -49,6 +49,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "c_opts.h"
 #include "c_unixize.h"
 
 void
@@ -139,12 +140,14 @@ u_get_nargv(struct opts_s* opts)
 		u_dump_errno();
 		return (NULL);
 	}
-	nargv[0] = strdup("r");
+	nargv[0] = (char*)malloc(2 * sizeof(char));
 	nargv[1] = NULL;
 	if (nargv[0] == NULL) {
 		u_memdel((void*)&nargv);
 		return (NULL);
 	}
+	nargv[0][0] = C_RECURSIVE_CHAR;
+	nargv[0][1] = 0x00;
 	nargv[1] = strdup("-R");
 	nargv[2] = NULL;
 	if (nargv[1] == NULL) {

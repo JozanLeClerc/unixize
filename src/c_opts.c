@@ -66,10 +66,11 @@ c_dump_usage(void)
 	);
 }
 
-static void
+static bool_t
 c_prompt_confirm(void)
 {
 	char c;
+	char first;
 	char path[MAXPATHLEN];
 
 	if (getcwd(path, MAXPATHLEN) == NULL) {
@@ -79,20 +80,58 @@ c_prompt_confirm(void)
 	else {
 		dprintf(STDERR_FILENO, "unixize %s? (y/n [n]) ", path);
 	}
-	scanf("%c", &c);
-	if (c != 'y' && c != 'Y') {
+	c = getchar();
+	first = c;
+	while (c != '\n' && c != EOF) {
+		c = getchar();
+	}
+	if (first != 'y' && first != 'Y') {
 		dprintf(STDERR_FILENO, "not unixized\n");
-		exit(0);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+static void
+c_recursive_parse
+(struct opts_s*	opts,
+ const char*	argv[])
+{
+	char** ptr;
+
+	ptr = (char**)argv;
+	ptr++;
+	while (*ptr != NULL) {
+		if ((*ptr)[1] == 'a') {
+			opts->hidden = TRUE;
+		}
+		else if ((*ptr)[1] == 'i') {
+			opts->confirm = TRUE;
+		}
+		else if ((*ptr)[1] == 'n') {
+			opts->hyphen = TRUE;
+		}
+		else if ((*ptr)[1] == 'p') {
+			opts->pretend = TRUE;
+		}
+		else if ((*ptr)[1] == 'R') {
+			opts->recursive = TRUE;
+		}
+		else if ((*ptr)[1] == 'v') {
+			opts->verbose = TRUE;
+		}
+		ptr++;
 	}
 }
 
-void
+bool_t
 c_get_opts
 (struct opts_s*	opts,
  int			argc,
  const char*	argv[])
 {
 	int opt;
+	bool_t ret;
 
 	opts->confirm = FALSE;
 	opts->hidden = FALSE;
@@ -101,12 +140,11 @@ c_get_opts
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
 	while (
-			argv[0][0] != 'r' &&
+			argv[0][0] != C_RECURSIVE_CHAR &&
 			(opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1
 		) {
 		if (opt == 'a') {
 			opts->hidden = TRUE;
-			printf("hidden\n");
 		}
 		else if (opt == 'h') {
 			c_dump_usage();
@@ -114,42 +152,46 @@ c_get_opts
 		}
 		else if (opt == 'i') {
 			opts->confirm = TRUE;
-			printf("confirm\n");
 		}
 		else if (opt == 'n') {
 			opts->hyphen = TRUE;
-			printf("hyphen\n");
 		}
 		else if (opt == 'p') {
 			opts->pretend = TRUE;
-			printf("pretend\n");
 		}
 		else if (opt == 'R') {
 			opts->recursive = TRUE;
-			printf("recursive\n");
 		}
 		else if (opt == 'v') {
 			opts->verbose = TRUE;
-			printf("verbose\n");
 		}
 		else if (opt == '?') {
 			c_dump_usage();
 			exit(1);
 		}
 	}
-	if (argv[0][0] != 'r' && optind < argc && argv[optind] != NULL) {
+	if (
+		argv[0][0] != C_RECURSIVE_CHAR &&
+		optind < argc &&
+		argv[optind] != NULL
+	) {
 		strncpy(opts->dir, argv[optind], PATH_MAX);
 		if (opts->dir[strlen(opts->dir) - 1] == '/') {
 			opts->dir[strlen(opts->dir) - 1] = 0x00;
 		}
 	}
-	else if (argv[0][0] == 'r' || argv[optind] == NULL) {
+	else if (argv[0][0] == C_RECURSIVE_CHAR || argv[optind] == NULL) {
 		strlcpy(opts->dir, ".", 2 * sizeof(char));
 	}
+	if (argv[0][0] == C_RECURSIVE_CHAR) {
+		c_recursive_parse(opts, argv);
+	}
+	ret = TRUE;
 	if (opts->confirm == TRUE) {
-		c_prompt_confirm();
+		ret = c_prompt_confirm();
 	}
 	if (opts->pretend == TRUE) {
 		opts->verbose = TRUE;
 	}
+	return (ret);
 }
