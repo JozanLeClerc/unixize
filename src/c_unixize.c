@@ -71,7 +71,7 @@ main
 	struct opts_s opts;
 	int nargc;
 	char** nargv;
-	static char subpath[MAXPATHLEN];
+	/* static char subpath[MAXPATHLEN]; */
 
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
