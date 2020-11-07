@@ -2,3 +2,4 @@ obj
 unixize
 git.sh
 compile_flags.txt
+.fossil-settings

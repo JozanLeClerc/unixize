@@ -45,6 +45,8 @@
  * This is the main function and entrypoint of the program.
  */
 
+#include <sys/param.h>
+
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
@@ -69,6 +71,7 @@ main
 	struct opts_s opts;
 	int nargc;
 	char** nargv;
+	static char subpath[MAXPATHLEN];
 
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
