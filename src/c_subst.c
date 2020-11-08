@@ -60,7 +60,7 @@
 #include <unistd.h>
 
 static void
-c_subst_normal
+c_classic_subst
 (char			filename[],
  const bool_t	hyphen)
 {
@@ -76,11 +76,11 @@ c_subst_normal
 				(strlen(p + 1) + 1) * sizeof(char)
 			);
 			*p = 'd';
-			c_subst_normal(filename, hyphen);
+			c_classic_subst(filename, hyphen);
 		}
 		if (u_ischarset(*p, " -") == TRUE) {
 			*p = (hyphen == FALSE) ? ('_') : ('-');
-			c_subst_normal(filename, hyphen);
+			c_classic_subst(filename, hyphen);
 		}
 		p++;
 	}
@@ -100,7 +100,9 @@ c_subst_current
 		*p = tolower(*p);
 		p++;
 	}
-	c_subst_normal(new_fname, hyphen);
+	/* c_unicode_subst(new_fname, hyphen); */
+	/* c_exascii_subst(new_fname, hyphen); */
+	c_classic_subst(new_fname, hyphen);
 }
 
 struct lfiles_s*
