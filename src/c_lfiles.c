@@ -57,7 +57,7 @@
 #include "c_unixize.h"
 #include "u_utils.h"
 
-static void
+void
 c_lfiles_add_back
 (struct lfiles_s**	head,
  struct lfiles_s*	new)
@@ -94,7 +94,7 @@ c_lfiles_clear(struct lfiles_s** head)
 	*head = NULL;
 }
 
-static struct lfiles_s*
+struct lfiles_s*
 c_lfiles_new
 (const char		filename[],
  unsigned char	filetype)
