@@ -130,7 +130,11 @@ c_classic_subst
 			c_classic_subst(filename, hyphen);
 		}
 		if (*p == sep && *(p + 1) == sep) {
-			memmove(p, p + 1, strlen(p + 1) * sizeof(char));
+			memmove(p, p + 1, (strlen(p + 1) + 1) * sizeof(char));
+			c_classic_subst(filename, hyphen);
+		}
+		if (*p == '.' && *(p + 1) == '.') {
+			memmove(p, p + 1, (strlen(p + 1) + 1) * sizeof(char));
 			c_classic_subst(filename, hyphen);
 		}
 		if (*p == ' ') {
@@ -140,7 +144,9 @@ c_classic_subst
 		if (
 			isalnum(*p) == 0 &&
 			u_ischarset(*p, C_CHARSET_VALID) == FALSE
-			) {
+		) {
+			memmove(p, p + 1, (strlen(p + 1) + 1) * sizeof(char));
+			c_classic_subst(filename, hyphen);
 		}
 		p++;
 	}
@@ -160,7 +166,7 @@ c_num_prefix_subst(char filename[])
 			}
 			else {
 				p_probe = p + 1;
-				while (*p_probe != 0x00 && *p_probe == '.') {
+				while (*p_probe != 0x00 && *p_probe != '.') {
 					p_probe++;
 				}
 				if (*p_probe != 0x00) {
