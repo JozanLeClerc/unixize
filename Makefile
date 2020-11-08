@@ -35,6 +35,7 @@ MKDIR			 = mkdir -p
 
 SRCS_NAME		 = c_lfiles
 SRCS_NAME		+= c_opts
+SRCS_NAME		+= c_subst
 SRCS_NAME		+= c_unixize
 SRCS_NAME		+= u_utils
 

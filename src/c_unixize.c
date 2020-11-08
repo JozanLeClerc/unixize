@@ -56,6 +56,7 @@
 
 #include "c_lfiles.h"
 #include "c_opts.h"
+#include "c_subst.h"
 #include "c_unixize.h"
 #include "u_utils.h"
 
@@ -93,12 +94,11 @@ main
 	if (og_files == NULL) {
 		return (0);
 	}
-	new_files = c_lfiles_duplicate(&og_files);
-	if (og_files == NULL) {
+	new_files = c_subst_filenames(opts.hyphen, og_files);
+	if (new_files == NULL) {
 		c_lfiles_clear(&og_files);
 		return (1);
 	}
-	/* c_subst(&opts, og_files); */
 	og_files_head = og_files;
 	new_files_head = new_files;
 	while (og_files != NULL && new_files != NULL) {

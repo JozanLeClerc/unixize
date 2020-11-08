@@ -116,30 +116,6 @@ c_lfiles_new
 }
 
 struct lfiles_s*
-c_lfiles_duplicate(struct lfiles_s** head)
-{
-	struct lfiles_s* dup_head;
-	struct lfiles_s* dup_link;
-	struct lfiles_s* origin;
-
-	dup_head = NULL;
-	if (head == NULL) {
-		return (NULL);
-	}
-	origin = *head;
-	while (origin != NULL) {
-		dup_link = c_lfiles_new(origin->filename, origin->filetype);
-		if (dup_link == NULL) {
-			u_dump_errno();
-			return (NULL);
-		}
-		origin = origin->next;
-		c_lfiles_add_back(&dup_head, dup_link);
-	}
-	return (dup_head);
-}
-
-struct lfiles_s*
 c_lfiles_gather(void)
 {
 	DIR* dirp;
