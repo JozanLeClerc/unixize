@@ -2,3 +2,4 @@ obj
 unixize
 git
 compile_flags.txt
+test

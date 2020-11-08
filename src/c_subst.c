@@ -53,6 +53,7 @@
 #include <string.h>
 
 #include "c_lfiles.h"
+#include "c_subst.h"
 #include "c_unixize.h"
 #include "u_utils.h"
 
@@ -119,20 +120,54 @@ c_classic_subst
  const bool_t	hyphen)
 {
 	char *p;
+	const char sep   = (hyphen == FALSE) ? ('_') : ('-');
+	const char c_sep = (hyphen == FALSE) ? ('-') : ('_');
 
 	p = (char*)filename;
 	while (*p != 0x00) {
-		if (hyphen == TRUE && *p == '_') {
-			*p = '-';
+		if (*p == c_sep) {
+			*p = sep;
 			c_classic_subst(filename, hyphen);
 		}
-		if (hyphen == FALSE && *p == '-') {
-			*p = '_';
+		if (*p == sep && *(p + 1) == sep) {
+			memmove(p, p + 1, strlen(p + 1) * sizeof(char));
 			c_classic_subst(filename, hyphen);
 		}
 		if (*p == ' ') {
-			*p = (hyphen == FALSE) ? ('_') : ('-');
+			*p = sep;
 			c_classic_subst(filename, hyphen);
+		}
+		if (
+			isalnum(*p) == 0 &&
+			u_ischarset(*p, C_CHARSET_VALID) == FALSE
+			) {
+		}
+		p++;
+	}
+}
+
+static void
+c_num_prefix_subst(char filename[])
+{
+	char *p;
+	char *p_probe;
+
+	p = filename;
+	while (*p != 0x00) {
+		if (isdigit(*p) == 0) {
+			if (*p != '.') {
+				return;
+			}
+			else {
+				p_probe = p + 1;
+				while (*p_probe != 0x00 && *p_probe == '.') {
+					p_probe++;
+				}
+				if (*p_probe != 0x00) {
+					*p = '_';
+				}
+				return;
+			}
 		}
 		p++;
 	}
@@ -140,7 +175,7 @@ c_classic_subst
 
 static void
 c_subst_current
-(char					new_fname[MAXPATHLEN],
+(char					new_fname[],
  const char				og_fname[],
  const bool_t			hyphen,
  const unsigned char	cxx)
@@ -154,8 +189,9 @@ c_subst_current
 		p++;
 	}
 	c_ext_subst(new_fname, cxx);
-	/* c_unicode_subst(new_fname, hyphen); */
+	c_num_prefix_subst(new_fname);
 	/* c_exascii_subst(new_fname, hyphen); */
+	/* c_unicode_subst(new_fname, hyphen); */
 	c_classic_subst(new_fname, hyphen);
 }
 

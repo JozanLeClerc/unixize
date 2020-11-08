@@ -59,11 +59,7 @@
 static void
 c_dump_usage(void)
 {
-	dprintf(
-		STDERR_FILENO,
-		C_USAGE_FMT,
-		"ahinpRv"
-	);
+	dprintf(STDERR_FILENO, C_USAGE_FMT);
 }
 
 static bool_t
