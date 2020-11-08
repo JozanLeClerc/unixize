@@ -215,3 +215,20 @@ u_decrease_subpath(char subp[])
 		*p = 0x00;
 	}
 }
+
+bool_t
+u_ischarset
+(wchar_t		c,
+ const wchar_t	cs[])
+{
+	wchar_t *p;
+
+	p = (wchar_t*)cs;
+	while (*p != 0x00 && *p != c) {
+		p++;
+	}
+	if (*p != 0x00) {
+		return (TRUE);
+	}
+	return (FALSE);
+}

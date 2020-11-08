@@ -43,6 +43,8 @@
  * 2020-11-05 19:28
  */
 
+#include <stddef.h>
+
 #include "c_unixize.h"
 
 void	u_memdel(void**);
@@ -52,3 +54,4 @@ void	u_del_nargv(char** nargv);
 char**	u_get_nargv(struct opts_s*);
 void	u_increase_subpath(char[], const char[]);
 void	u_decrease_subpath(char[]);
+bool_t	u_ischarset(wchar_t, const wchar_t[]);
