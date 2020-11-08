@@ -140,7 +140,7 @@ c_lfiles_gather(void)
 		link = c_lfiles_new(dp->d_name, dp->d_type);
 		if (link == NULL) {
 			u_dump_errno();
-			c_lfiles_clear(&link);
+			c_lfiles_clear(&head);
 			return (NULL);
 		}
 		c_lfiles_add_back(&head, link);
