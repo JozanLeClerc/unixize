@@ -218,12 +218,12 @@ u_decrease_subpath(char subp[])
 
 bool_t
 u_ischarset
-(wchar_t		c,
- const wchar_t	cs[])
+(wchar_t	c,
+ const char	cs[])
 {
-	wchar_t *p;
+	char *p;
 
-	p = (wchar_t*)cs;
+	p = (char*)cs;
 	while (*p != 0x00 && *p != c) {
 		p++;
 	}

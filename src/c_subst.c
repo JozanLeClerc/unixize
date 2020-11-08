@@ -13,7 +13,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Copyright © 2020 Joe
+ * Copyright (c) 2020 Joe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,20 +38,94 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * unixize: src/u_utils.h
+ * unixize: src/c_subst.c
+ * 2020-11-08 02:50
  * Joe
- * 2020-11-05 19:28
+ *
+ * This is were we subsitute the new names and return them into a
+ * new lfiles_s linked list.
  */
 
+#include <sys/param.h>
+
+#include <ctype.h>
 #include <stddef.h>
+#include <string.h>
 
+#include "c_lfiles.h"
 #include "c_unixize.h"
+#include "u_utils.h"
 
-void	u_memdel(void**);
-void	u_dump_errno(void);
-void	u_dump_errno_path(const char[]);
-void	u_del_nargv(char** nargv);
-char**	u_get_nargv(struct opts_s*);
-void	u_increase_subpath(char[], const char[]);
-void	u_decrease_subpath(char[]);
-bool_t	u_ischarset(wchar_t, const char[]);
+#include <stdio.h>
+#include <unistd.h>
+
+static void
+c_subst_normal
+(char			filename[],
+ const bool_t	hyphen)
+{
+	char *p;
+
+	dprintf(STDOUT_FILENO, "%s\n", filename);
+	p = (char*)filename;
+	while (*p != 0x00) {
+		if (u_ischarset(*p, "\u00f0") == TRUE) {
+			memmove(
+				p,
+				p + 1,
+				(strlen(p + 1) + 1) * sizeof(char)
+			);
+			*p = 'd';
+			c_subst_normal(filename, hyphen);
+		}
+		if (u_ischarset(*p, " -") == TRUE) {
+			*p = (hyphen == FALSE) ? ('_') : ('-');
+			c_subst_normal(filename, hyphen);
+		}
+		p++;
+	}
+}
+
+static void
+c_subst_current
+(char			new_fname[MAXPATHLEN],
+ const char		og_fname[],
+ const bool_t	hyphen)
+{
+	unsigned char* p;
+
+	strlcpy(new_fname, og_fname, MAXPATHLEN);
+	p = (unsigned char*)new_fname;
+	while (*p != 0x00) {
+		*p = tolower(*p);
+		p++;
+	}
+	c_subst_normal(new_fname, hyphen);
+}
+
+struct lfiles_s*
+c_subst_filenames
+(struct lfiles_s*	og_head,
+ bool_t				hyphen)
+{
+	struct lfiles_s* dup_head;
+	struct lfiles_s* link;
+	struct lfiles_s* origin;
+	char tmp[MAXPATHLEN];
+
+	dup_head = NULL;
+	link = NULL;
+	origin = og_head;
+	while (origin != NULL) {
+		c_subst_current(tmp, origin->filename, hyphen);
+		link = c_lfiles_new(tmp, origin->filetype);
+		if (link == NULL) {
+			u_dump_errno();
+			c_lfiles_clear(&dup_head);
+			return (NULL);
+		}
+		c_lfiles_add_back(&dup_head, link);
+		origin = origin->next;
+	}
+	return (dup_head);
+}

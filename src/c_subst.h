@@ -13,7 +13,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  *
- * Copyright © 2020 Joe
+ * Copyright (c) 2020 Joe
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,20 +38,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * unixize: src/u_utils.h
+ * unixize: src/c_subst.h
+ * 2020-11-08 02:48
  * Joe
- * 2020-11-05 19:28
+ *
+ * This is the main function and entrypoint of the program.
  */
 
-#include <stddef.h>
+#ifndef __C_SUBST_H__
+#define __C_SUBST_H__
 
 #include "c_unixize.h"
 
-void	u_memdel(void**);
-void	u_dump_errno(void);
-void	u_dump_errno_path(const char[]);
-void	u_del_nargv(char** nargv);
-char**	u_get_nargv(struct opts_s*);
-void	u_increase_subpath(char[], const char[]);
-void	u_decrease_subpath(char[]);
-bool_t	u_ischarset(wchar_t, const char[]);
+struct lfiles_s* c_subst_filenames(struct lfiles_s*, bool_t);
+
+#endif /* ifndef __C_SUBST_H__ */
