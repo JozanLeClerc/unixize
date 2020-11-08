@@ -63,12 +63,13 @@ struct opts_s {
 	bool_t	recursive;
 	bool_t	verbose;
 	char	dir[MAXPATHLEN];
+	unsigned char cxx;
 };
 
 struct lfiles_s {
-	struct lfiles_s*	next;
-	char*				filename;
-	unsigned char		filetype;
+	struct lfiles_s* next;
+	char*	filename;
+	unsigned char filetype;
 };
 
 #endif /* ifndef __C_UNIXIZE_H__ */

@@ -94,7 +94,7 @@ main
 	if (og_files == NULL) {
 		return (0);
 	}
-	new_files = c_subst_filenames(og_files, opts.hyphen);
+	new_files = c_subst_filenames(og_files, opts.hyphen, opts.cxx);
 	if (new_files == NULL) {
 		c_lfiles_clear(&og_files);
 		printf("qwe\n");

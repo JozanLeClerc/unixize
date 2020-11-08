@@ -48,9 +48,11 @@
 
 #include "c_unixize.h"
 
-#define C_OPTS				"ahinpRv"
+#define C_OPTS				"ahinpRve:"
 #define C_RECURSIVE_CHAR	'r'
-#define C_USAGE_FMT			"usage: unixize [-%s] [directory]\n"
+#define C_USAGE_FMT			"usage: unixize [-%s] [-e version] [directory]\n"
+#define C_C_OPT_FMT			\
+	"unixize: unsupported -e value '%s' (must be always 0, 1 or 2)\n"
 
 bool_t	c_get_opts(struct opts_s*, int, const char*[]);
 

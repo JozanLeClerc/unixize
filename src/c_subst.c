@@ -60,25 +60,77 @@
 #include <unistd.h>
 
 static void
+c_ext_subst
+(char					filename[],
+ const unsigned char	cxx)
+{
+	const size_t len = strlen(filename);
+
+	if (cxx == 0 || len < 4) {
+		return;
+	}
+	if (
+		filename[len - 4] == '.' &&
+		filename[len - 3] == 't' &&
+		filename[len - 2] == 'x' &&
+		filename[len - 1] == 't'
+	) {
+		filename[len - 4] = 0x00;
+	}
+	else if (
+		filename[len - 4] == '.' &&
+		filename[len - 3] == 'a' &&
+		filename[len - 2] == 's' &&
+		filename[len - 1] == 'm'
+	) {
+		memcpy(filename + len - 3, "S", 2 * sizeof(char));
+	}
+	else if (
+		filename[len - 4] == '.' &&
+		filename[len - 3] == 'c' &&
+		filename[len - 2] == 'p' &&
+		filename[len - 1] == 'p'
+	) {
+		if (cxx == 1) {
+			memcpy(filename + len - 3, "cc", 3 * sizeof(char));
+		}
+		else if (cxx == 2) {
+			memcpy(filename + len - 3, "cxx", 4 * sizeof(char));
+		}
+	}
+	else if (
+		filename[len - 4] == '.' &&
+		filename[len - 3] == 'h' &&
+		filename[len - 2] == 'p' &&
+		filename[len - 1] == 'p'
+	) {
+		if (cxx == 1) {
+			memcpy(filename + len - 3, "hh", 3 * sizeof(char));
+		}
+		else if (cxx == 2) {
+			memcpy(filename + len - 3, "hxx", 4 * sizeof(char));
+		}
+	}
+}
+
+static void
 c_classic_subst
 (char			filename[],
  const bool_t	hyphen)
 {
 	char *p;
 
-	dprintf(STDOUT_FILENO, "%s\n", filename);
 	p = (char*)filename;
 	while (*p != 0x00) {
-		if (u_ischarset(*p, "\u00f0") == TRUE) {
-			memmove(
-				p,
-				p + 1,
-				(strlen(p + 1) + 1) * sizeof(char)
-			);
-			*p = 'd';
+		if (hyphen == TRUE && *p == '_') {
+			*p = '-';
 			c_classic_subst(filename, hyphen);
 		}
-		if (u_ischarset(*p, " -") == TRUE) {
+		if (hyphen == FALSE && *p == '-') {
+			*p = '_';
+			c_classic_subst(filename, hyphen);
+		}
+		if (*p == ' ') {
 			*p = (hyphen == FALSE) ? ('_') : ('-');
 			c_classic_subst(filename, hyphen);
 		}
@@ -88,9 +140,10 @@ c_classic_subst
 
 static void
 c_subst_current
-(char			new_fname[MAXPATHLEN],
- const char		og_fname[],
- const bool_t	hyphen)
+(char					new_fname[MAXPATHLEN],
+ const char				og_fname[],
+ const bool_t			hyphen,
+ const unsigned char	cxx)
 {
 	unsigned char* p;
 
@@ -100,6 +153,7 @@ c_subst_current
 		*p = tolower(*p);
 		p++;
 	}
+	c_ext_subst(new_fname, cxx);
 	/* c_unicode_subst(new_fname, hyphen); */
 	/* c_exascii_subst(new_fname, hyphen); */
 	c_classic_subst(new_fname, hyphen);
@@ -107,8 +161,9 @@ c_subst_current
 
 struct lfiles_s*
 c_subst_filenames
-(struct lfiles_s*	og_head,
- bool_t				hyphen)
+(struct lfiles_s*		og_head,
+ const bool_t			hyphen,
+ const unsigned char	cxx)
 {
 	struct lfiles_s* dup_head;
 	struct lfiles_s* link;
@@ -119,7 +174,7 @@ c_subst_filenames
 	link = NULL;
 	origin = og_head;
 	while (origin != NULL) {
-		c_subst_current(tmp, origin->filename, hyphen);
+		c_subst_current(tmp, origin->filename, hyphen, cxx);
 		link = c_lfiles_new(tmp, origin->filetype);
 		if (link == NULL) {
 			u_dump_errno();

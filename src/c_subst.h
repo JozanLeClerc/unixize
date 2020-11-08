@@ -50,6 +50,7 @@
 
 #include "c_unixize.h"
 
-struct lfiles_s* c_subst_filenames(struct lfiles_s*, bool_t);
+struct lfiles_s* c_subst_filenames(struct lfiles_s*,
+	const bool_t, const unsigned char);
 
 #endif /* ifndef __C_SUBST_H__ */

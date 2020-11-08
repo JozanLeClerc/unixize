@@ -62,7 +62,7 @@ c_dump_usage(void)
 	dprintf(
 		STDERR_FILENO,
 		C_USAGE_FMT,
-		C_OPTS
+		"ahinpRv"
 	);
 }
 
@@ -101,23 +101,31 @@ c_recursive_parse
 
 	ptr = (char**)argv + 1;
 	while (*ptr != NULL) {
-		if ((*ptr)[1] == 'a') {
+		if ((*ptr)[0] == 'a') {
 			opts->hidden = TRUE;
 		}
-		else if ((*ptr)[1] == 'i') {
+		else if ((*ptr)[0] == 'i') {
 			opts->confirm = TRUE;
 		}
-		else if ((*ptr)[1] == 'n') {
+		else if ((*ptr)[0] == 'n') {
 			opts->hyphen = TRUE;
 		}
-		else if ((*ptr)[1] == 'p') {
+		else if ((*ptr)[0] == 'p') {
 			opts->pretend = TRUE;
 		}
-		else if ((*ptr)[1] == 'R') {
+		else if ((*ptr)[0] == 'R') {
 			opts->recursive = TRUE;
 		}
-		else if ((*ptr)[1] == 'v') {
+		else if ((*ptr)[0] == 'v') {
 			opts->verbose = TRUE;
+		}
+		else if ((*ptr)[0] == 'e') {
+			if ((*ptr)[1] == '1') {
+				opts->cxx = 1;
+			}
+			else if ((*ptr)[1] == '2') {
+				opts->cxx = 2;
+			}
 		}
 		ptr++;
 	}
@@ -138,6 +146,7 @@ c_get_opts
 	opts->pretend = FALSE;
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
+	opts->cxx = 0;
 	while (
 			argv[0][0] != C_RECURSIVE_CHAR &&
 			(opt = getopt(argc, (char *const *)argv, C_OPTS)) != -1
@@ -163,6 +172,19 @@ c_get_opts
 		}
 		else if (opt == 'v') {
 			opts->verbose = TRUE;
+		}
+		else if (opt == 'e') {
+			if (u_ischarset(optarg[0], "012") == FALSE) {
+				dprintf(
+					STDERR_FILENO,
+					C_C_OPT_FMT,
+					optarg
+				);
+				exit(2);
+			}
+			else {
+				opts->cxx = optarg[0] - 48;
+			}
 		}
 		else if (opt == '?') {
 			c_dump_usage();

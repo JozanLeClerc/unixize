@@ -99,31 +99,50 @@ static char
 u_get_extra_args(char args[], struct opts_s* opts)
 {
 	char i;
+	char null_char;
 
 	i = 0;
+	null_char = 0;
 	args[0] = 0x00;
 	if (opts->hidden == TRUE) {
-		memcpy((char*)args + (i * 3), "-a:", 4 * sizeof(char));
+		memcpy((char*)args + (i * 2), "a:", 3 * sizeof(char));
+		null_char += 2;
 		i++;
 	}
 	if (opts->confirm == TRUE) {
-		memcpy((char*)args + (i * 3), "-i:", 4 * sizeof(char));
+		memcpy((char*)args + (i * 2), "i:", 3 * sizeof(char));
+		null_char += 2;
 		i++;
 	}
 	if (opts->hyphen == TRUE) {
-		memcpy((char*)args + (i * 3), "-n:", 4 * sizeof(char));
+		memcpy((char*)args + (i * 2), "n:", 3 * sizeof(char));
+		null_char += 2;
 		i++;
 	}
 	if (opts->pretend == TRUE) {
-		memcpy((char*)args + (i * 3), "-p:", 4 * sizeof(char));
+		memcpy((char*)args + (i * 2), "p:", 3 * sizeof(char));
+		null_char += 2;
 		i++;
 	}
 	if (opts->verbose == TRUE) {
-		memcpy((char*)args + (i * 3), "-v:", 4 * sizeof(char));
+		memcpy((char*)args + (i * 2), "v:", 3 * sizeof(char));
+		null_char += 2;
 		i++;
 	}
+	if (opts->cxx != 0) {
+		if (opts->cxx == 1) {
+			memcpy((char*)args + (i * 2), "e1:", 4 * sizeof(char));
+			null_char += 3;
+			i++;
+		}
+		else {
+			memcpy((char*)args + (i * 2), "e2:", 4 * sizeof(char));
+			null_char += 3;
+			i++;
+		}
+	}
 	if (i > 0) {
-		*(args + (i * 3) - 1) = 0x00;
+		*(args + null_char) = 0x00;
 	}
 	return (i);
 }
