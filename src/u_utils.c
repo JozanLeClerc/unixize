@@ -43,6 +43,8 @@
  * 2020-11-05 19:27
  */
 
+#include <sys/param.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -176,4 +178,40 @@ u_get_nargv(struct opts_s* opts)
 		i++;
 	}
 	return (nargv);
+}
+
+void
+u_increase_subpath
+(char		subp[],
+ const char	newp[])
+{
+	strlcpy(
+		subp + strlen(subp),
+		newp,
+		MAXPATHLEN - strlen(subp) - 1
+	);
+	subp[strlen(subp) + 1] = 0x00;
+	subp[strlen(subp)] = '/';
+}
+
+void
+u_decrease_subpath(char subp[])
+{
+	char* p;
+
+	p = subp;
+	p += strlen(subp);
+	if (p == 0) {
+		return;
+	}
+	p -= 2;
+	while (subp - p != 0 && *p != '/') {
+		p--;
+	}
+	if (*p == '/') {
+		*(p + 1) = 0x00;
+	}
+	else if (subp - p == 0) {
+		*p = 0x00;
+	}
 }

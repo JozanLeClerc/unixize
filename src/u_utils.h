@@ -50,3 +50,5 @@ void	u_dump_errno(void);
 void	u_dump_errno_path(const char[]);
 void	u_del_nargv(char** nargv);
 char**	u_get_nargv(struct opts_s*);
+void	u_increase_subpath(char[], const char[]);
+void	u_decrease_subpath(char[]);

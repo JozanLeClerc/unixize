@@ -71,7 +71,7 @@ main
 	struct opts_s opts;
 	int nargc;
 	char** nargv;
-	/* static char subpath[MAXPATHLEN]; */
+	static char subpath[MAXPATHLEN] = "";
 
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
@@ -79,6 +79,15 @@ main
 	if (chdir((const char*)opts.dir) == -1) {
 		u_dump_errno_path(opts.dir);
 		return (1);
+	}
+	if (
+		argv[0][0] != 'r' &&
+		strlen(opts.dir) > 1 &&
+		strncmp(opts.dir, ".", 2 * sizeof(char)) != 0
+	) {
+		strlcpy(subpath, opts.dir, MAXPATHLEN - 1);
+		subpath[strlen(subpath) + 1] = 0x00;
+		subpath[strlen(subpath)] = '/';
 	}
 	og_files = c_lfiles_gather();
 	if (og_files == NULL) {
@@ -103,6 +112,7 @@ main
 				u_dump_errno_path(og_files->filename);
 			}
 			else {
+				u_increase_subpath(subpath, og_files->filename);
 				nargv = u_get_nargv(&opts);
 				if (nargv != NULL) {
 					nargc = 0;
@@ -113,17 +123,22 @@ main
 					u_del_nargv(nargv);
 				}
 				chdir("../");
+				u_decrease_subpath(subpath);
 			}
 		}
 		if (opts.verbose == TRUE) {
 			dprintf(
 				STDOUT_FILENO,
-				"'%s' -> '%s'\n",
+				"'%s%s' -> '%s%s'\n",
+				subpath,
 				og_files->filename,
+				subpath,
 				new_files->filename
 		   );
 		}
-		/* rename(); */
+		if (opts.pretend == FALSE) {
+			/* rename(); */
+		}
 		og_files = og_files->next;
 		new_files = new_files->next;
 	}
