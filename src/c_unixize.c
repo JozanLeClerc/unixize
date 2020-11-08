@@ -64,10 +64,10 @@ main
 (int			argc,
  const char*	argv[])
 {
-	struct lfiles_s* og_files;
 	struct lfiles_s* new_files;
-	struct lfiles_s* og_files_head;
 	struct lfiles_s* new_files_head;
+	struct lfiles_s* og_files;
+	struct lfiles_s* og_files_head;
 	struct opts_s opts;
 	int nargc;
 	char** nargv;
@@ -126,18 +126,26 @@ main
 				u_decrease_subpath(subpath);
 			}
 		}
-		if (opts.verbose == TRUE) {
-			dprintf(
-				STDOUT_FILENO,
-				"'%s%s' -> '%s%s'\n",
-				subpath,
+		if (
+			strncmp(
 				og_files->filename,
-				subpath,
-				new_files->filename
-		   );
-		}
-		if (opts.pretend == FALSE) {
-			/* rename(); */
+				new_files->filename,
+				strlen(new_files->filename) + 1
+			) == 0
+		) {
+			if (opts.verbose == TRUE) {
+				dprintf(
+					STDOUT_FILENO,
+					"'%s%s' -> '%s%s'\n",
+					subpath,
+					og_files->filename,
+					subpath,
+					new_files->filename
+				);
+			}
+			if (opts.pretend == FALSE) {
+				/* rename(); */
+			}
 		}
 		og_files = og_files->next;
 		new_files = new_files->next;
