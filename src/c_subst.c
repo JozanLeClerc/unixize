@@ -200,12 +200,24 @@ c_specific_subst(char filename[])
 static void
 c_unicode_subst(char filename[])
 {
-	unsigned char *p;
+	char *p;
 
-	p = (unsigned char*)filename;
+	p = filename;
 	while (*p != 0x00) {
-		if (u_ischarset(*p, "")) {
-			*p = 'c';
+		if (
+			u_ischarset(*p, C_CHARSET_A_MAJ) == TRUE ||
+			u_ischarset(*p, C_CHARSET_A_MIN) == TRUE
+		) {
+			*p = 'a';
+			memmove(p + 1, p + 2, (strlen(p + 2) + 1) * sizeof(char));
+			c_unicode_subst(filename);
+		}
+		if (
+			u_ischarset(*p, C_CHARSET_O_MAJ) == TRUE ||
+			u_ischarset(*p, C_CHARSET_O_MIN) == TRUE
+		) {
+			*p = 'o';
+			memmove(p + 1, p + 2, (strlen(p + 2) + 1) * sizeof(char));
 			c_unicode_subst(filename);
 		}
 		p++;
