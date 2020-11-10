@@ -50,7 +50,7 @@
 
 #include "c_unixize.h"
 
-#define C_CHARSET_VALID "_."
+#define C_CHARSET_VALID "_-."
 
 struct lfiles_s* c_subst_filenames(struct lfiles_s*,
 	const bool_t, const unsigned char);

@@ -180,6 +180,39 @@ c_num_prefix_subst(char filename[])
 }
 
 static void
+c_specific_subst(char filename[])
+{
+	char *p;
+
+	p = filename;
+	while (*p != 0x00) {
+		if ((*p == 'c' || *p == 'C')) {
+			if (*(p + 1) == '+' && *(p + 2) == '+') {
+				*(p) = 'c';
+				*(p + 1) = 'x';
+				*(p + 2) = 'x';
+			}
+		}
+		p++;
+	}
+}
+
+static void
+c_unicode_subst(char filename[])
+{
+	unsigned char *p;
+
+	p = (unsigned char*)filename;
+	while (*p != 0x00) {
+		if (u_ischarset(*p, "")) {
+			*p = 'c';
+			c_unicode_subst(filename);
+		}
+		p++;
+	}
+}
+
+static void
 c_subst_current
 (char					new_fname[],
  const char				og_fname[],
@@ -196,8 +229,8 @@ c_subst_current
 	}
 	c_ext_subst(new_fname, cxx);
 	c_num_prefix_subst(new_fname);
-	/* c_exascii_subst(new_fname, hyphen); */
-	/* c_unicode_subst(new_fname, hyphen); */
+	c_specific_subst(new_fname);
+	c_unicode_subst(new_fname);
 	c_classic_subst(new_fname, hyphen);
 }
 
