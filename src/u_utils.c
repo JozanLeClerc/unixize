@@ -237,7 +237,7 @@ u_decrease_subpath(char subp[])
 
 bool_t
 u_ischarset
-(wchar_t	c,
+(int		c,
  const char	cs[])
 {
 	char *p;

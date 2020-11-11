@@ -54,4 +54,4 @@ void	u_del_nargv(char** nargv);
 char**	u_get_nargv(struct opts_s*);
 void	u_increase_subpath(char[], const char[]);
 void	u_decrease_subpath(char[]);
-bool_t	u_ischarset(wchar_t, const char[]);
+bool_t	u_ischarset(int, const char[]);
