@@ -129,6 +129,11 @@ u_get_extra_args(char args[], struct opts_s* opts)
 		null_char += 2;
 		i++;
 	}
+	if (opts->rpretend == TRUE) {
+		memcpy((char*)args + (i * 2), "r:", 3 * sizeof(char));
+		null_char += 2;
+		i++;
+	}
 	if (opts->verbose == TRUE) {
 		memcpy((char*)args + (i * 2), "v:", 3 * sizeof(char));
 		null_char += 2;

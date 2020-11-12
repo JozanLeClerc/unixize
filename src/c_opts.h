@@ -48,10 +48,10 @@
 
 #include "c_unixize.h"
 
-#define C_OPTS				"ahiknpRve:"
+#define C_OPTS				"ahiknprRve:"
 #define C_RECURSIVE_CHAR	'r'
 #define C_USAGE_FMT			\
-	"usage: unixize [-ahiknpRv] [-e version] [directory]\n"
+	"usage: unixize [-ahiknprRv] [-e version] [directory]\n"
 #define C_C_OPT_FMT			\
 	"unixize: unsupported -e value '%s' (must be always 0, 1 or 2)\n"
 

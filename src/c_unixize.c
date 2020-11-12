@@ -150,6 +150,14 @@ main
 				/* rename(); */
 			}
 		}
+		else if (opts.rpretend == TRUE) {
+				dprintf(
+					STDOUT_FILENO,
+					"Untouched: '%s%s'\n",
+					subpath,
+					og_files->filename
+				);
+		}
 		og_files = og_files->next;
 		new_files = new_files->next;
 	}

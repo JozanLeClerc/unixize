@@ -112,6 +112,9 @@ c_recursive_parse
 		else if ((*ptr)[0] == 'p') {
 			opts->pretend = TRUE;
 		}
+		else if ((*ptr)[0] == 'r') {
+			opts->rpretend = TRUE;
+		}
 		else if ((*ptr)[0] == 'R') {
 			opts->recursive = TRUE;
 		}
@@ -144,6 +147,7 @@ c_get_opts
 	opts->hyphen = FALSE;
 	opts->preserve = FALSE;
 	opts->pretend = FALSE;
+	opts->rpretend = FALSE;
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
 	opts->cxx = 0;
@@ -169,6 +173,9 @@ c_get_opts
 		}
 		else if (opt == 'p') {
 			opts->pretend = TRUE;
+		}
+		else if (opt == 'r') {
+			opts->rpretend = TRUE;
 		}
 		else if (opt == 'R') {
 			opts->recursive = TRUE;
