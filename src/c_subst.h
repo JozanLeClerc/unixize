@@ -51,12 +51,22 @@
 #include "c_unixize.h"
 
 #define C_CHARSET_VALID	"_-."
-#define C_CHARSET_A_MAJ	"\x80\x81\x82\x83\x84\x85"
-#define C_CHARSET_A_MIN	"\xa0\xa1\xa2\xa3\xa4\xa5"
-#define C_CHARSET_O_MAJ	"\x92\x93\x94\x95\x96\x98"
-#define C_CHARSET_O_MIN	"\xb2\xb3\xb4\xb5\xb6\xb8"
-#define C_CHARSET_AE	"\x86\xa6"
-#define C_CHARSET_N		"\x91\xb1"
+#define C_CHARSET_A \
+	"\x80\x81\x82\x83\x84\x85\xa0\xa1\xa2\xa3\xa4\xa5"
+#define C_CHARSET_O \
+	"\x92\x93\x94\x95\x96\x98\xb2\xb3\xb4\xb5\xb6\xb8"
+#define C_CHARSET_AE \
+	"\x86\xa6"
+#define C_CHARSET_N \
+	"\x91\xb1"
+#define C_CHARSET_DH \
+	"\x90\xb0"
+#define C_CHARSET_C \
+	"\x87\xa7"
+#define C_CHARSET_E \
+	"\x88\x89\x8a\x8b\xa8\xa9\xaa\xab"
+#define C_CHARSET_U \
+	"\x99\x9a\x9b\x9c\xb9\xba\xbb\xbc"
 
 struct lfiles_s* c_subst_filenames(struct lfiles_s*, const bool_t,
 	const bool_t, const unsigned char);

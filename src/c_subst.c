@@ -208,11 +208,37 @@ c_unicode_subst(char filename[])
 
 	p = (unsigned char*)filename;
 	while (*p != 0x00) {
+		if (*p == 0xc2) {
+			if (*(p + 1) == 0xb9) {
+				*p = '1';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
+			if (*(p + 1) == 0xb2) {
+				*p = '2';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
+			if (*(p + 1) == 0xb3) {
+				*p = '3';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
+		}
 		if (*p == 0xc3) {
-			if (
-				u_isucharset((unsigned char)*(p + 1), C_CHARSET_A_MAJ) == TRUE ||
-				u_isucharset((unsigned char)*(p + 1), C_CHARSET_A_MIN) == TRUE
-			) {
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_A) == TRUE) {
 				*p = 'a';
 				memmove(
 					p + 1,
@@ -221,10 +247,7 @@ c_unicode_subst(char filename[])
 				);
 				c_unicode_subst(filename);
 			}
-			if (
-				u_isucharset((unsigned char)*(p + 1), C_CHARSET_O_MAJ) == TRUE ||
-				u_isucharset((unsigned char)*(p + 1), C_CHARSET_O_MIN) == TRUE
-			) {
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_O) == TRUE) {
 				*p = 'o';
 				memmove(
 					p + 1,
@@ -246,26 +269,31 @@ c_unicode_subst(char filename[])
 					(strlen((const char*)p + 2) + 1) * sizeof(char)
 				);
 				c_unicode_subst(filename);
-			}		
-			if (*(p + 1) == 0x72) {
-				*p = '2';
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_DH) == TRUE) {
+				*p = 'd';
+				*(p + 1) = 'h';
+				c_unicode_subst(filename);
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_C) == TRUE) {
+				*p = 'c';
 				memmove(
 					p + 1,
 					p + 2,
 					(strlen((const char*)p + 2) + 1) * sizeof(char)
 				);
 				c_unicode_subst(filename);
-			}		
-			if (*(p + 1) == 0x73) {
-				*p = '3';
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_E) == TRUE) {
+				*p = 'e';
 				memmove(
 					p + 1,
 					p + 2,
 					(strlen((const char*)p + 2) + 1) * sizeof(char)
 				);
 				c_unicode_subst(filename);
-			}		
-			if (*(p + 1) == 0x75) {
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_U) == TRUE) {
 				*p = 'u';
 				memmove(
 					p + 1,
@@ -273,7 +301,18 @@ c_unicode_subst(char filename[])
 					(strlen((const char*)p + 2) + 1) * sizeof(char)
 				);
 				c_unicode_subst(filename);
-			}		
+			}
+		}
+		if (*p == 0xce) {
+			if (*(p + 1) == 0xbc) {
+				*p = 'u';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
 		}
 		p++;
 	}
