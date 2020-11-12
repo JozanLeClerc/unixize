@@ -260,11 +260,11 @@ u_ischarset
 bool_t
 u_isucharset
 (const unsigned char	c,
- const unsigned char	cs[])
+ const char				cs[])
 {
-	char *p;
+	unsigned char *p;
 
-	p = (char*)cs;
+	p = (unsigned char*)cs;
 	while (*p != 0x00 && *p != c) {
 		p++;
 	}

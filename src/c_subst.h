@@ -50,11 +50,13 @@
 
 #include "c_unixize.h"
 
-#define C_CHARSET_VALID "_-."
-#define C_CHARSET_A_MAJ "\u00c0\u00c1\u00c2\u00c3\u00c4\u00c5"
-#define C_CHARSET_A_MIN "\u00e0\u00e1\u00e2\u00e3\u00e4\u00e5"
-#define C_CHARSET_O_MAJ "\u00d2\u00d3\u00d4\u00d5\u00d6\u00d8"
-#define C_CHARSET_O_MIN "\u00f2\u00f3\u00f4\u00f5\u00f6\u00f8"
+#define C_CHARSET_VALID	"_-."
+#define C_CHARSET_A_MAJ	"\x80\x81\x82\x83\x84\x85"
+#define C_CHARSET_A_MIN	"\xa0\xa1\xa2\xa3\xa4\xa5"
+#define C_CHARSET_O_MAJ	"\x92\x93\x94\x95\x96\x98"
+#define C_CHARSET_O_MIN	"\xb2\xb3\xb4\xb5\xb6\xb8"
+#define C_CHARSET_AE	"\x86\xa6"
+#define C_CHARSET_N		"\x91\xb1"
 
 struct lfiles_s* c_subst_filenames(struct lfiles_s*, const bool_t,
 	const bool_t, const unsigned char);

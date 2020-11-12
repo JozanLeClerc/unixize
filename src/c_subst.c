@@ -209,13 +209,71 @@ c_unicode_subst(char filename[])
 	p = (unsigned char*)filename;
 	while (*p != 0x00) {
 		if (*p == 0xc3) {
-			if (u_isucharset((unsigned char)*(p + 1), "\xa0\xb6") == TRUE) {
-				printf(">>>>{%hhx}\n", *p);
-				printf(">>>>{%hhx}\n", *(p + 1));
+			if (
+				u_isucharset((unsigned char)*(p + 1), C_CHARSET_A_MAJ) == TRUE ||
+				u_isucharset((unsigned char)*(p + 1), C_CHARSET_A_MIN) == TRUE
+			) {
 				*p = 'a';
-				memmove(p + 1, p + 2, (strlen((const char*)p + 2) + 1) * sizeof(char));
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
 				c_unicode_subst(filename);
 			}
+			if (
+				u_isucharset((unsigned char)*(p + 1), C_CHARSET_O_MAJ) == TRUE ||
+				u_isucharset((unsigned char)*(p + 1), C_CHARSET_O_MIN) == TRUE
+			) {
+				*p = 'o';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_AE) == TRUE) {
+				*p = 'a';
+				*(p + 1) = 'e';
+				c_unicode_subst(filename);
+			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_N) == TRUE) {
+				*p = 'n';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}		
+			if (*(p + 1) == 0x72) {
+				*p = '2';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}		
+			if (*(p + 1) == 0x73) {
+				*p = '3';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}		
+			if (*(p + 1) == 0x75) {
+				*p = 'u';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}		
 		}
 		p++;
 	}

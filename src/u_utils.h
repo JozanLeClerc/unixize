@@ -55,4 +55,4 @@ char**	u_get_nargv(struct opts_s*);
 void	u_increase_subpath(char[], const char[]);
 void	u_decrease_subpath(char[]);
 bool_t	u_ischarset(const int, const char[]);
-bool_t	u_isucharset(const unsigned char, const unsigned char[]);
+bool_t	u_isucharset(const unsigned char, const char[]);

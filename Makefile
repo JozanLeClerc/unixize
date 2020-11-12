@@ -28,7 +28,6 @@ CFLAGS			 = -std=c89
 CFLAGS			+= -Wall
 CFLAGS			+= -Wextra
 CFLAGS			+= -Werror
-CFLAGS			+= -Wno-unicode
 CFLAGS			+= -pedantic
 
 RM				 = rm -rf
