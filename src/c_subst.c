@@ -302,6 +302,15 @@ c_unicode_subst(char filename[])
 				);
 				c_unicode_subst(filename);
 			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_I) == TRUE) {
+				*p = 'i';
+				memmove(
+					p + 1,
+					p + 2,
+					(strlen((const char*)p + 2) + 1) * sizeof(char)
+				);
+				c_unicode_subst(filename);
+			}
 		}
 		if (*p == 0xce) {
 			if (*(p + 1) == 0xbc) {
