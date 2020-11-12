@@ -114,6 +114,11 @@ u_get_extra_args(char args[], struct opts_s* opts)
 		null_char += 2;
 		i++;
 	}
+	if (opts->preserve == TRUE) {
+		memcpy((char*)args + (i * 2), "k:", 3 * sizeof(char));
+		null_char += 2;
+		i++;
+	}
 	if (opts->hyphen == TRUE) {
 		memcpy((char*)args + (i * 2), "n:", 3 * sizeof(char));
 		null_char += 2;
@@ -237,8 +242,25 @@ u_decrease_subpath(char subp[])
 
 bool_t
 u_ischarset
-(int		c,
+(const int	c,
  const char	cs[])
+{
+	char *p;
+
+	p = (char*)cs;
+	while (*p != 0x00 && *p != c) {
+		p++;
+	}
+	if (*p != 0x00) {
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+bool_t
+u_isucharset
+(const unsigned char	c,
+ const unsigned char	cs[])
 {
 	char *p;
 

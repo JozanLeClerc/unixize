@@ -49,6 +49,7 @@
 
 #include <dirent.h>
 #include <errno.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
@@ -74,6 +75,7 @@ main
 	char** nargv;
 	static char subpath[MAXPATHLEN] = "";
 
+	setlocale(LC_ALL, "");
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
 	}
@@ -94,7 +96,7 @@ main
 	if (og_files == NULL) {
 		return (0);
 	}
-	new_files = c_subst_filenames(og_files, opts.hyphen, opts.cxx);
+	new_files = c_subst_filenames(og_files, opts.hyphen, opts.preserve, opts.cxx);
 	if (new_files == NULL) {
 		c_lfiles_clear(&og_files);
 		return (1);

@@ -59,6 +59,7 @@ struct opts_s {
 	bool_t	confirm;
 	bool_t	hidden;
 	bool_t	hyphen;
+	bool_t	preserve;
 	bool_t	pretend;
 	bool_t	recursive;
 	bool_t	verbose;

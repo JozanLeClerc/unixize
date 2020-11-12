@@ -103,6 +103,9 @@ c_recursive_parse
 		else if ((*ptr)[0] == 'i') {
 			opts->confirm = TRUE;
 		}
+		else if ((*ptr)[0] == 'k') {
+			opts->preserve = TRUE;
+		}
 		else if ((*ptr)[0] == 'n') {
 			opts->hyphen = TRUE;
 		}
@@ -139,6 +142,7 @@ c_get_opts
 	opts->confirm = FALSE;
 	opts->hidden = FALSE;
 	opts->hyphen = FALSE;
+	opts->preserve = FALSE;
 	opts->pretend = FALSE;
 	opts->recursive = FALSE;
 	opts->verbose = FALSE;
@@ -156,6 +160,9 @@ c_get_opts
 		}
 		else if (opt == 'i') {
 			opts->confirm = TRUE;
+		}
+		else if (opt == 'k') {
+			opts->preserve = TRUE;
 		}
 		else if (opt == 'n') {
 			opts->hyphen = TRUE;

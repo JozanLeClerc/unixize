@@ -56,7 +56,7 @@
 #define C_CHARSET_O_MAJ "\u00d2\u00d3\u00d4\u00d5\u00d6\u00d8"
 #define C_CHARSET_O_MIN "\u00f2\u00f3\u00f4\u00f5\u00f6\u00f8"
 
-struct lfiles_s* c_subst_filenames(struct lfiles_s*,
+struct lfiles_s* c_subst_filenames(struct lfiles_s*, const bool_t,
 	const bool_t, const unsigned char);
 
 #endif /* ifndef __C_SUBST_H__ */
