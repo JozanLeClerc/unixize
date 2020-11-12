@@ -65,9 +65,10 @@ c_ext_subst
 (char					filename[],
  const unsigned char	cxx)
 {
-	const size_t len = strlen(filename);
+	size_t len;
 
-	if (cxx == 0 || len < 4) {
+	len = strlen(filename);
+	if (cxx == 0 || len < 5) {
 		return;
 	}
 	if (
@@ -131,6 +132,10 @@ c_classic_subst
 			c_classic_subst(filename, hyphen, preserve);
 		}
 		if (*p == sep && *(p + 1) == sep) {
+			memmove(p, p + 1, (strlen(p + 1) + 1) * sizeof(char));
+			c_classic_subst(filename, hyphen, preserve);
+		}
+		if (*p == sep && *(p + 1) == '.') {
 			memmove(p, p + 1, (strlen(p + 1) + 1) * sizeof(char));
 			c_classic_subst(filename, hyphen, preserve);
 		}
@@ -356,7 +361,11 @@ c_subst_current
 {
 	unsigned char* p;
 
+	new_fname[0] = 0x00;
 	strlcpy(new_fname, og_fname, MAXPATHLEN);
+	if (new_fname[0] == 0x00) {
+		return;
+	}
 	p = (unsigned char*)new_fname;
 	while (*p != 0x00) {
 		*p = tolower(*p);

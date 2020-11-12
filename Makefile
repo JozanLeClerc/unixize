@@ -52,6 +52,9 @@ ${OBJS_DIR}%.c.o: ${SRCS_DIR}%.c ${INCS} Makefile
 ${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} -o ${TARGET} ${OBJS}
 
+opti: CFLAGS += -march=ivybridge -O2 -pipe
+opti: all
+
 all: ${TARGET}
 
 debug: CFLAGS += -g3
