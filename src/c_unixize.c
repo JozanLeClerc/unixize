@@ -133,7 +133,8 @@ main
 				og_files->filename,
 				new_files->filename,
 				strlen(new_files->filename) + 1
-			) != 0
+			) != 0 &&
+			new_files->filename[0] != 0x00
 		) {
 			if (opts.verbose == TRUE) {
 				dprintf(

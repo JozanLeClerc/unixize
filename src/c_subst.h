@@ -61,6 +61,8 @@
 	"\x91\xb1"
 #define C_CHARSET_DH \
 	"\x90\xb0"
+#define C_CHARSET_TH \
+	"\x9e\xbe"
 #define C_CHARSET_C \
 	"\x87\xa7"
 #define C_CHARSET_E \
@@ -69,6 +71,8 @@
 	"\x99\x9a\x9b\x9c\xb9\xba\xbb\xbc"
 #define C_CHARSET_I \
 	"\x8c\x8d\x8e\x8f\xac\xab\xac\xad"
+#define C_CHARSET_Y \
+	"\x9d\xbd\xbf"
 
 struct lfiles_s* c_subst_filenames(struct lfiles_s*, const bool_t,
 	const bool_t, const unsigned char);
