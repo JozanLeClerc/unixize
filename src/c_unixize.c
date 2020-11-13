@@ -87,7 +87,7 @@ main
 		argv[0][0] != 'r' &&
 		strlen(opts.dir) > 1 &&
 		strncmp(opts.dir, ".", 2 * sizeof(char)) != 0
-	) {
+		) {
 		strlcpy(subpath, opts.dir, MAXPATHLEN - 1);
 		subpath[strlen(subpath) + 1] = 0x00;
 		subpath[strlen(subpath)] = '/';
@@ -133,9 +133,9 @@ main
 				og_files->filename,
 				new_files->filename,
 				strlen(new_files->filename) + 1
-			) != 0 ||
+				) != 0 ||
 			new_files->filename[0] != 0x00
-		) {
+			) {
 			if (opts.verbose == TRUE) {
 				dprintf(
 					STDOUT_FILENO,
@@ -144,18 +144,18 @@ main
 					og_files->filename,
 					subpath,
 					new_files->filename
-				);
+					);
 			}
 			if (opts.pretend == FALSE) {
 				/* rename(); */
 			}
 		}
 		else if (opts.rpretend == TRUE) {
-				dprintf(
-					STDOUT_FILENO,
-					"Untouched: '%s%s'\n",
-					subpath,
-					og_files->filename
+			dprintf(
+				STDOUT_FILENO,
+				"Untouched: '%s%s'\n",
+				subpath,
+				og_files->filename
 				);
 		}
 		og_files = og_files->next;
