@@ -16,7 +16,7 @@
 #
 # GNU Makefile
 
-.DEFAULT_GOAL	:= asan
+.DEFAULT_GOAL	:= all
 SHELL			:= /bin/sh
 
 DESTDIR			 = /usr/local
@@ -29,6 +29,7 @@ CFLAGS			+= -Wall
 CFLAGS			+= -Wextra
 CFLAGS			+= -Werror
 CFLAGS			+= -pedantic
+CFLAGS			+= -march=ivybridge -O2 -pipe
 
 RM				 = rm -rf
 MKDIR			 = mkdir -p
@@ -51,9 +52,6 @@ ${OBJS_DIR}%.c.o: ${SRCS_DIR}%.c ${INCS} Makefile
 
 ${TARGET}: ${OBJS}
 	${CC} ${CFLAGS} -o ${TARGET} ${OBJS}
-
-opti: CFLAGS += -march=ivybridge -O2 -pipe
-opti: all
 
 all: ${TARGET}
 
