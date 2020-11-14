@@ -2,5 +2,6 @@ obj
 unixize
 git
 compile_flags.txt
+.clang_complete
 test
 test2

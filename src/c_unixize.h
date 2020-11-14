@@ -61,7 +61,7 @@ struct opts_s {
 	bool_t	hyphen;
 	bool_t	preserve;
 	bool_t	pretend;
-	bool_t	rpretend;
+	bool_t	rverbose;
 	bool_t	recursive;
 	bool_t	verbose;
 	char	dir[MAXPATHLEN];

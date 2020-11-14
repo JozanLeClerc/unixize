@@ -129,7 +129,7 @@ u_get_extra_args(char args[], struct opts_s* opts)
 		null_char += 2;
 		i++;
 	}
-	if (opts->rpretend == TRUE) {
+	if (opts->rverbose == TRUE) {
 		memcpy((char*)args + (i * 2), "r:", 3 * sizeof(char));
 		null_char += 2;
 		i++;
@@ -179,7 +179,7 @@ u_get_nargv(struct opts_s* opts)
 	}
 	nargv[0][0] = C_RECURSIVE_CHAR;
 	nargv[0][1] = 0x00;
-	nargv[1] = strdup("-R");
+	nargv[1] = strdup("R");
 	nargv[2] = NULL;
 	if (nargv[1] == NULL) {
 		u_memdel((void*)&nargv[0]);
