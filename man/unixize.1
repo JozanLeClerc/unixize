@@ -34,18 +34,32 @@
 .\" (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 .\" LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 .\" ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-.\" (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-.\" SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-.\" 
+.\" (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+.\" THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+.\"
 .\" unixize: man/unixize.1
 .\" 2020-11-14 20:57
 .\" date
 .\" Joe
 .\"
-.\" Manpage for unixize
+.\" Manpage for unixize.
 .\" Contact rbousset@42lyon.fr to correct errors and typos.
 .\"
-.TH unixize 1 "14 Nov 2020" "unixize 1.0" "Unixize Reference"
+.TH unixize 1 "14 November 2020" "unixize 1.0"
+.
 .SH NAME
-.B unixize 
-\- 
+.B unixize
+\- bulk rename files to UNIX style
+.
+.SH SYNOPSIS
+.SY unixize
+.RB [ \-ahiknprRv ]
+[\c
+.BI \-e ext\c
+]
+.RI [ directory ]
+.YS
+.
+.SH DESCRIPTION
+.I unixize
+
