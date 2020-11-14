@@ -73,6 +73,7 @@ main
 	struct opts_s opts;
 	int nargc;
 	char** nargv;
+	static int ret = 0;
 	static char subpath[MAXPATHLEN] = "";
 
 	setlocale(LC_ALL, "");
@@ -96,7 +97,12 @@ main
 	if (og_files == NULL) {
 		return (0);
 	}
-	new_files = c_subst_filenames(og_files, opts.hyphen, opts.preserve, opts.cxx);
+	new_files = c_subst_filenames(
+		og_files,
+		opts.hyphen,
+		opts.preserve,
+		opts.cxx
+		);
 	if (new_files == NULL) {
 		c_lfiles_clear(&og_files);
 		return (1);
@@ -147,7 +153,16 @@ main
 					);
 			}
 			if (opts.pretend == FALSE) {
-				/* rename(); */
+				if (rename(og_files->filename, new_files->filename) == -1) {
+					dprintf(
+						STDERR_FILENO,
+						"unixize: rename %s to %s: %s\n",
+						og_files->filename,
+						new_files->filename,
+						strerror(errno)
+						);
+					ret = 2;
+				}
 			}
 		}
 		else if (opts.rverbose == TRUE) {
@@ -163,7 +178,7 @@ main
 	}
 	c_lfiles_clear(&og_files_head);
 	c_lfiles_clear(&new_files_head);
-	return (0);
+	return (ret);
 }
 
 /*
