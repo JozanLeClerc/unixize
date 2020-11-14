@@ -266,6 +266,11 @@ c_unicode_subst(char filename[])
 				*(p + 1) = 'e';
 				c_unicode_subst(filename);
 			}
+			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_AA) == TRUE) {
+				*p = 'a';
+				*(p + 1) = 'a';
+				c_unicode_subst(filename);
+			}
 			if (u_isucharset((unsigned char)*(p + 1), C_CHARSET_N) == TRUE) {
 				*p = 'n';
 				memmove(

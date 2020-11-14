@@ -45,11 +45,28 @@
 .\" Manpage for unixize.
 .\" Contact rbousset@42lyon.fr to correct errors and typos.
 .\"
+.de Text
+.nop \)\\$*
+..
+.de squoted_char
+.Text \(oq\fB\\$1\f[]\(cq\\$2
+..
+.de dquoted_char
+.Text \(lq\fB\\$1\f[]\(rq\\$2
+..
+.de file_example
+.P
+.RS
+\(oq\\$1\(cq \-\> \(oq\\$2\(cq
+.RE
+.P
+..
+.
 .TH unixize 1 "14 November 2020" "unixize 1.0"
 .
 .SH NAME
 .B unixize
-\- bulk rename files to UNIX style
+\- bulk rename directory
 .
 .SH SYNOPSIS
 .SY unixize
@@ -61,5 +78,33 @@
 .YS
 .
 .SH DESCRIPTION
-.I unixize
-
+.P
+The
+.B unixize
+utility renames all file in a given
+.I directory
+to a predefined style. Without any
+.I directory
+option specified, the current working directory will be assumed.
+.P
+All upper-case
+characters will be set to lower-case.
+.file_example FILE file
+All unicode characters will be deleted
+except for latin extended ascii characters, which will be replaced by the most
+meaningful ascii character (or double characters).
+.file_example Hliðskjálf.jpg hlidhskjalf.jpg
+Spaces will be substitued by a
+.BR separator ,
+either underscores
+.squoted_char _
+by default or hyphens
+.squoted_char -
+with the
+.B -n
+option. The
+.
+.
+.
+.
+unixize can subst ext... see \(lqOPTIONS\(rq bellow.
