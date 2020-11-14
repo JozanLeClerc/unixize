@@ -76,7 +76,6 @@ main
 	static int ret = 0;
 	static char subpath[MAXPATHLEN] = "";
 
-	setlocale(LC_ALL, "");
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
 	}
@@ -127,7 +126,7 @@ main
 					while (argv[nargc + 1] != NULL) {
 						nargc++;
 					}
-					main(nargc, (const char**)nargv);
+					ret = main(nargc, (const char**)nargv);
 					u_del_nargv(nargv);
 				}
 				chdir("../");
