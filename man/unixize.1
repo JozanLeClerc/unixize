@@ -63,7 +63,7 @@
 ..
 .
 .
-.TH unixize 1 "14 November 2020" "unixize 1.0"
+.TH unixize 1 "15 November 2020" "unixize 1.0"
 .
 .
 .SH NAME
@@ -98,32 +98,26 @@ All upper-case characters will be set to lower-case.
 .
 .file_example "FILE" "file"
 .
-All unicode characters will be deleted
-except for latin extended ascii characters, which will be replaced by the most
-meaningful ascii character (or double characters).
-.
-.file_example "\(Eu\-Hliðskjálf-\(de\(dd.jpg" "hlidhskjalf.jpg"
-.
 Spaces will be substitued by a
 .BR separator ,
-either underscores
-.squoted_text _
-by default
+by default underscores
+.squoted_text _ ) (
 .
 .file_example "a file with spaces.org" "a_file_with_spaces.org"
-.
-or hyphens
-(\c
-.squoted_text \-\c )
-with the
-.B -n
-option.
-.file_example "a file with spaces.org" "a\-file\-with\-spaces.org"
 .
 Multiple spaces will be condensed into only one
 .BR sparator .
 .
 .file_example "lots      of     spaces.gif" "lots_of_spaces.gif"
 .
-.P
-unixize can subst ext... see \(lqOPTIONS\(rq bellow.
+All unicode characters will be deleted
+except for latin extended ascii characters, which will be replaced by the most
+relevant ascii character (or double characters).
+.
+.file_example "\(Eu\-Hliðskjálf-\(de\(dd.jpg" "hlidhskjalf.jpg"
+.
+.SH OPTIONS
+.SH SEE ALSO
+.IR ascii (1),
+.IR rename (2)
+.\" vim: set filetype=groff:
