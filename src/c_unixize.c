@@ -152,16 +152,16 @@ main
 					);
 			}
 			if (opts.pretend == FALSE) {
-				if (rename(og_files->filename, new_files->filename) == -1) {
-					dprintf(
-						STDERR_FILENO,
-						"unixize: rename %s to %s: %s\n",
-						og_files->filename,
-						new_files->filename,
-						strerror(errno)
-						);
-					ret = 2;
-				}
+				/* if (rename(og_files->filename, new_files->filename) == -1) { */
+				/*     dprintf( */
+				/*         STDERR_FILENO, */
+				/*         "unixize: rename %s to %s: %s\n", */
+				/*         og_files->filename, */
+				/*         new_files->filename, */
+				/*         strerror(errno) */
+				/*         ); */
+				/*     ret = 2; */
+				/* } */
 			}
 		}
 		else if (opts.rverbose == TRUE) {

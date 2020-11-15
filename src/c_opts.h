@@ -51,7 +51,7 @@
 #define C_OPTS				"ahiknprRve:"
 #define C_RECURSIVE_CHAR	'r'
 #define C_USAGE_FMT			\
-	"usage: unixize [-ahiknprRv] [-e ext] [directory]\n"
+	"usage: unixize [-ahiknprRv] [-e ext] directory\n"
 #define C_C_OPT_FMT			\
 	"unixize: unsupported -e value '%s' (must be always 0, 1 or 2)\n"
 

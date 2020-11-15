@@ -190,7 +190,7 @@ c_get_opts
 					C_C_OPT_FMT,
 					optarg
 				);
-				exit(2);
+				exit(1);
 			}
 			else {
 				opts->cxx = optarg[0] - 48;
@@ -203,18 +203,23 @@ c_get_opts
 	}
 	if (
 		argv[0][0] != C_RECURSIVE_CHAR &&
+		argv[optind] == NULL
+		) {
+		c_dump_usage();
+		exit(1);
+	}
+	if (
+		argv[0][0] != C_RECURSIVE_CHAR &&
 		optind < argc &&
 		argv[optind] != NULL
-	) {
+		) {
 		strncpy(opts->dir, argv[optind], PATH_MAX);
 		if (opts->dir[strlen(opts->dir) - 1] == '/') {
 			opts->dir[strlen(opts->dir) - 1] = 0x00;
 		}
 	}
-	else if (argv[0][0] == C_RECURSIVE_CHAR || argv[optind] == NULL) {
+	else if (argv[0][0] == C_RECURSIVE_CHAR) {
 		strlcpy(opts->dir, ".", 2 * sizeof(char));
-	}
-	if (argv[0][0] == C_RECURSIVE_CHAR) {
 		c_recursive_parse(opts, argv);
 	}
 	ret = TRUE;
