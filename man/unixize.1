@@ -68,7 +68,7 @@
 .
 .SH NAME
 .B unixize
-\- bulk rename directory
+\- bulk rename directory contents
 .
 .
 .SH SYNOPSIS
@@ -116,6 +116,21 @@ relevant ascii character (or double characters).
 .
 .file_example "\(Eu\-Hliðskjálf-\(de\(dd.jpg" "hlidhskjalf.jpg"
 .
+Two special patterns are always substitued, regardless of options.
+.P
+The first one is
+.dquoted_text C\+\+ ,
+which will always be changed to
+.dquoted_text cxx
+whether the letter
+.squoted_text C
+is upper-case or lower-case.
+.P
+.
+.file_example "learn_c++_programming.pdf" "learn_cxx_programming.pdf"
+.
+The second one is removes the first dot
+.squoted_text . ) (
 .SH OPTIONS
 .SH SEE ALSO
 .IR ascii (7),
