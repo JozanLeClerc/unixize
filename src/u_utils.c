@@ -210,37 +210,37 @@ u_get_nargv(struct opts_s* opts)
 }
 
 void
-u_increase_subpath
-(char		subp[],
+u_inc_path
+(char		path[],
  const char	newp[])
 {
 	strlcpy(
-		subp + strlen(subp),
+		path + strlen(path),
 		newp,
-		MAXPATHLEN - strlen(subp) - 1
+		MAXPATHLEN - strlen(path) - 1
 	);
-	subp[strlen(subp) + 1] = 0x00;
-	subp[strlen(subp)] = '/';
+	path[strlen(path) + 1] = 0x00;
+	path[strlen(path)] = '/';
 }
 
 void
-u_decrease_subpath(char subp[])
+u_dec_path(char path[])
 {
 	char* p;
 
-	p = subp;
-	p += strlen(subp);
+	p = path;
+	p += strlen(path);
 	if (p == 0) {
 		return;
 	}
 	p -= 2;
-	while (subp - p != 0 && *p != '/') {
+	while (path - p != 0 && *p != '/') {
 		p--;
 	}
 	if (*p == '/') {
 		*(p + 1) = 0x00;
 	}
-	else if (subp - p == 0) {
+	else if (path - p == 0) {
 		*p = 0x00;
 	}
 }

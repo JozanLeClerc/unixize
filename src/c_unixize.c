@@ -72,27 +72,24 @@ main
 	struct lfiles_s* og_files_head;
 	struct opts_s opts;
 	int nargc;
+	int tmp;
 	char** nargv;
+	char og_file[MAXPATHLEN];
+	char new_file[MAXPATHLEN];
 	static int ret = 0;
-	static char subpath[MAXPATHLEN] = "";
+	static char path[MAXPATHLEN] = "";
 
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
 		return (0);
 	}
-	if (chdir((const char*)opts.dir) == -1) {
-		u_dump_errno_path(opts.dir);
-		return (1);
-	}
 	if (
-		argv[0][0] != 'r' &&
-		strlen(opts.dir) > 1 &&
-		strncmp(opts.dir, ".", 2 * sizeof(char)) != 0
+		argv[0][0] != 'r'
 		) {
-		strlcpy(subpath, opts.dir, MAXPATHLEN - 1);
-		subpath[strlen(subpath) + 1] = 0x00;
-		subpath[strlen(subpath)] = '/';
+		strlcpy(path, opts.dir, MAXPATHLEN - 1);
+		path[strlen(path) + 1] = 0x00;
+		path[strlen(path)] = '/';
 	}
-	og_files = c_lfiles_gather();
+	og_files = c_lfiles_gather(path);
 	if (og_files == NULL) {
 		return (0);
 	}
@@ -115,23 +112,18 @@ main
 			continue;
 		}
 		if (opts.recursive == TRUE && og_files->filetype == DT_DIR) {
-			if (chdir((const char*)og_files->filename) == -1) {
-				u_dump_errno_path(og_files->filename);
-			}
-			else {
-				u_increase_subpath(subpath, og_files->filename);
-				nargv = u_get_nargv(&opts);
-				if (nargv != NULL) {
-					nargc = 0;
-					while (argv[nargc + 1] != NULL) {
-						nargc++;
-					}
-					ret = main(nargc, (const char**)nargv);
-					u_del_nargv(nargv);
+			u_inc_path(path, og_files->filename);
+			nargv = u_get_nargv(&opts);
+			if (nargv != NULL) {
+				nargc = 0;
+				while (argv[nargc + 1] != NULL) {
+					nargc++;
 				}
-				chdir("../");
-				u_decrease_subpath(subpath);
+				tmp = main(nargc, (const char**)nargv);
+				ret = (tmp != 0) ? (tmp) : (ret);
+				u_del_nargv(nargv);
 			}
+			u_dec_path(path);
 		}
 		if (
 			strncmp(
@@ -145,30 +137,32 @@ main
 				dprintf(
 					STDOUT_FILENO,
 					"'%s%s' -> '%s%s'\n",
-					subpath,
+					path,
 					og_files->filename,
-					subpath,
+					path,
 					new_files->filename
 					);
 			}
 			if (opts.pretend == FALSE) {
-				/* if (rename(og_files->filename, new_files->filename) == -1) { */
-				/*     dprintf( */
-				/*         STDERR_FILENO, */
-				/*         "unixize: rename %s to %s: %s\n", */
-				/*         og_files->filename, */
-				/*         new_files->filename, */
-				/*         strerror(errno) */
-				/*         ); */
-				/*     ret = 2; */
-				/* } */
+				sprintf(og_file, "%s%s", path, og_files->filename);
+				sprintf(new_file, "%s%s", path, new_files->filename);
+				if (rename(og_file, new_file) == -1) {
+					dprintf(
+						STDERR_FILENO,
+						"unixize: rename %s to %s: %s\n",
+						og_files->filename,
+						new_files->filename,
+						strerror(errno)
+						);
+					ret = 2;
+				}
 			}
 		}
 		else if (opts.rverbose == TRUE) {
 			dprintf(
 				STDOUT_FILENO,
 				"Untouched: '%s%s'\n",
-				subpath,
+				path,
 				og_files->filename
 				);
 		}

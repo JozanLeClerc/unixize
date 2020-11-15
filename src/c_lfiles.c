@@ -116,7 +116,7 @@ c_lfiles_new
 }
 
 struct lfiles_s*
-c_lfiles_gather(void)
+c_lfiles_gather(const char dir[])
 {
 	DIR* dirp;
 	struct dirent* dp;
@@ -125,7 +125,7 @@ c_lfiles_gather(void)
 
 	head = NULL;
 	link = NULL;
-	dirp = opendir(".");
+	dirp = opendir(dir);
 	if (dirp == NULL) {
 		u_dump_errno();
 		return (NULL);
@@ -134,12 +134,12 @@ c_lfiles_gather(void)
 		if (
 			strncmp(dp->d_name, ".", 2 * sizeof(char)) == 0 ||
 			strncmp(dp->d_name, "..", 3 * sizeof(char)) == 0
-		) {
+			) {
 			continue;
 		}
 		link = c_lfiles_new(dp->d_name, dp->d_type);
 		if (link == NULL) {
-			u_dump_errno();
+			u_dump_errno_path(dir);
 			c_lfiles_clear(&head);
 			return (NULL);
 		}

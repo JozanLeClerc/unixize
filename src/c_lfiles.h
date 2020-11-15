@@ -51,6 +51,6 @@
 void	c_lfiles_add_back(struct lfiles_s**, struct lfiles_s*);
 void	c_lfiles_clear(struct lfiles_s**);
 struct lfiles_s* c_lfiles_new(const char[], unsigned char);
-struct lfiles_s* c_lfiles_gather(void);
+struct lfiles_s* c_lfiles_gather(const char[]);
 
 #endif /* end of include guard: __C_LFILES_H__ */
