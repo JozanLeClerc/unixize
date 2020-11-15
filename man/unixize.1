@@ -48,16 +48,16 @@
 .de Text
 .nop \)\\$*
 ..
-.de squoted_char
-.Text \(oq\fB\\$1\f[]\(cq\\$2
+.de squoted_text
+.Text \\$3\(oq\fB\\$1\f[]\(cq\\$2
 ..
-.de dquoted_char
-.Text \(lq\fB\\$1\f[]\(rq\\$2
+.de dquoted_text
+.Text \\$3\(lq\fB\\$1\f[]\(rq\\$2
 ..
 .de file_example
 .P
 .RS
-\(oq\\$1\(cq \-\> \(oq\\$2\(cq
+\`\\$1\' \-\> \`\\$2\'
 .RE
 .P
 ..
@@ -77,7 +77,7 @@
 [\c
 .BI \-e ext\c
 ]
-.RI [ directory ]
+.I directory
 .YS
 .
 .
@@ -87,44 +87,43 @@ The
 .B unixize
 utility renames all file in a given
 .I directory
-to a predefined style. Without any
-.I directory
-option specified, the current working directory will be assumed.
-All upper-case
-characters will be set to lower-case.
+to a predefined style. Here is a description of the
+.B unixize
+behaviour without options. This behavious can be changed using options, see
+\(lqOPTIONS\(rq below. By default:
 .
-.file_example FILE file
+.P
+.
+All upper-case characters will be set to lower-case.
+.
+.file_example "FILE" "file"
 .
 All unicode characters will be deleted
 except for latin extended ascii characters, which will be replaced by the most
 meaningful ascii character (or double characters).
 .
-.file_example \(EuHliðskjálf\(de\(dd.jpg hlidhskjalf.jpg
+.file_example "\(Eu\-Hliðskjálf-\(de\(dd.jpg" "hlidhskjalf.jpg"
 .
 Spaces will be substitued by a
 .BR separator ,
 either underscores
-.squoted_char _
+.squoted_text _
 by default
 .
 .file_example "a file with spaces.org" "a_file_with_spaces.org"
 .
 or hyphens
-.squoted_char -
+(\c
+.squoted_text \-\c )
 with the
 .B -n
 option.
-.file_example "a file with spaces.org" "a-file-with-spaces.org"
+.file_example "a file with spaces.org" "a\-file\-with\-spaces.org"
 .
 Multiple spaces will be condensed into only one
 .BR sparator .
 .
 .file_example "lots      of     spaces.gif" "lots_of_spaces.gif"
-.
-All other non alphanum chars...
-.
-.
-.
 .
 .P
 unixize can subst ext... see \(lqOPTIONS\(rq bellow.
