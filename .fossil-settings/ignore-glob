@@ -3,6 +3,8 @@ unixize
 git
 compile_flags.txt
 .clang_complete
+.ccls
+.ccls-cache
 test
 test2
 *.gz
