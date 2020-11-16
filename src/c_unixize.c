@@ -125,33 +125,32 @@ main
 			}
 			u_dec_path(path);
 		}
+		sprintf(og_file, "%s%s", path, og_files->filename);
+		sprintf(new_file, "%s%s", path, new_files->filename);
 		if (
 			strncmp(
 				og_files->filename,
 				new_files->filename,
 				strlen(new_files->filename) + 1
 				) != 0 &&
-			new_files->filename[0] != 0x00
+			new_files->filename[0] != 0x00 &&
+			access(new_file, F_OK) == -1
 			) {
 			if (opts.verbose == TRUE) {
 				dprintf(
 					STDOUT_FILENO,
-					"'%s%s' -> '%s%s'\n",
-					path,
-					og_files->filename,
-					path,
-					new_files->filename
+					"'%s' -> '%s'\n",
+					og_file,
+					new_file
 					);
 			}
 			if (opts.pretend == FALSE) {
-				sprintf(og_file, "%s%s", path, og_files->filename);
-				sprintf(new_file, "%s%s", path, new_files->filename);
 				if (rename(og_file, new_file) == -1) {
 					dprintf(
 						STDERR_FILENO,
 						"unixize: rename %s to %s: %s\n",
-						og_files->filename,
-						new_files->filename,
+						og_file,
+						new_file,
 						strerror(errno)
 						);
 					ret = 2;
@@ -161,9 +160,8 @@ main
 		else if (opts.rverbose == TRUE) {
 			dprintf(
 				STDOUT_FILENO,
-				"Untouched: '%s%s'\n",
-				path,
-				og_files->filename
+				"Untouched: '%s'\n",
+				og_file
 				);
 		}
 		og_files = og_files->next;
