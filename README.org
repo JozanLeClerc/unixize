@@ -20,23 +20,23 @@ You can get *unixize* either through ~git~ or ~fossil~.
 
 For ~fossil~ use:
 #+BEGIN_SRC shell
-$ mkdir unixize
-$ cd unixize
-$ fossil clone https://chiselapp.com/user/JozanLeClerc/repository/unixize unixize.fossil
-$ fossil open --force unixize.fossil
+mkdir unixize
+cd unixize
+fossil clone https://chiselapp.com/user/JozanLeClerc/repository/unixize unixize.fossil
+fossil open --force unixize.fossil
 #+END_SRC
 or for ~git~:
 #+BEGIN_SRC shell
-$ git clone git://jozanleclerc.xyz/jozan/unixize.git
-$ cd unixize
+git clone git://jozanleclerc.xyz/jozan/unixize.git
+cd unixize
 #+END_SRC
 Then build the program:
 #+BEGIN_SRC shell
-$ make
-# make install clean
+make
+sudo make install clean
 #+END_SRC
 
 * End note
 Please note that unixize was tested only on FreeBSD at the moment.
 Linux and macOS tests are coming soon.  You can report bug on
-[[GitHub][https://github.com/JozanLeClerc/unixize.git]].
+[[https://github.com/JozanLeClerc/unixize.git][GitHub]].
