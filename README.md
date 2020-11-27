@@ -34,10 +34,12 @@ You can get **unixize** either through `git` or `fossil`.
 
 For `fossil` use:
 
-    mkdir unixize
-    cd unixize
-    fossil clone https://chiselapp.com/user/JozanLeClerc/repository/unixize unixize.fossil
-    fossil open --force unixize.fossil
+``` shell
+mkdir unixize
+cd unixize
+fossil clone https://chiselapp.com/user/JozanLeClerc/repository/unixize unixize.fossil
+fossil open --force unixize.fossil
+```
 
 or for `git`:
 
