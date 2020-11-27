@@ -42,7 +42,7 @@ sudo gmake install clean
 #+END_SRC
 
 * Usage
-*USE WITH CAUTION*.
+*USE WITH CAUTION!*
 
 Without the ~-p~ option, *unixize* will commit to do exactly
 what it's supposed to do, rename all the badly formatted in the chosen
