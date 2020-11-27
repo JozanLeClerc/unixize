@@ -52,6 +52,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -80,7 +81,7 @@ main
 	static char path[MAXPATHLEN] = "";
 
 	if (c_get_opts(&opts, argc, argv) == FALSE) {
-		return (0);
+		return (EXIT_SUCCESS);
 	}
 	if (
 		argv[0][0] != 'r'
@@ -91,7 +92,7 @@ main
 	}
 	og_files = c_lfiles_gather(path);
 	if (og_files == NULL) {
-		return (0);
+		return (EXIT_SUCCESS);
 	}
 	new_files = c_subst_filenames(
 		og_files,
@@ -101,7 +102,7 @@ main
 		);
 	if (new_files == NULL) {
 		c_lfiles_clear(&og_files);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	og_files_head = og_files;
 	new_files_head = new_files;

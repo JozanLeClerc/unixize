@@ -160,7 +160,7 @@ c_get_opts
 		}
 		else if (opt == 'h') {
 			c_dump_usage();
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		else if (opt == 'i') {
 			opts->confirm = TRUE;
@@ -190,7 +190,7 @@ c_get_opts
 					C_C_OPT_FMT,
 					optarg
 				);
-				exit(1);
+				exit(EXIT_FAILURE);
 			}
 			else {
 				opts->cxx = optarg[0] - 48;
@@ -198,7 +198,7 @@ c_get_opts
 		}
 		else if (opt == '?') {
 			c_dump_usage();
-			exit(1);
+			exit(EXIT_FAILURE);
 		}
 	}
 	if (
@@ -206,7 +206,7 @@ c_get_opts
 		argv[optind] == NULL
 		) {
 		c_dump_usage();
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	if (
 		argv[0][0] != C_RECURSIVE_CHAR &&

@@ -11,7 +11,7 @@
 # ========================
 #
 # unixize: Makefile
-# 2020-11-02 21:43
+# Fri Nov 27 22:53:29 CET 2020
 # Joe
 #
 # GNU Makefile
@@ -19,18 +19,18 @@
 .DEFAULT_GOAL	:= all
 SHELL			:= /bin/sh
 
-DESTDIR			 =
-SRCS_DIR		 = src/
-OBJS_DIR		 = obj/
-MAN_DIR			 = man/
+DESTDIR			:=
+SRCS_DIR		:= src/
+OBJS_DIR		:= obj/
+MAN_DIR			:= man/
 
-CC				:= cc
-CFLAGS			 = -std=c89
+CC				?= cc
+CFLAGS			+= -std=c89
 CFLAGS			+= -Wall
 CFLAGS			+= -Wextra
 CFLAGS			+= -Werror
 CFLAGS			+= -pedantic
-CFLAGS			+= -march=ivybridge -O2 -pipe
+CFLAGS			+= -march=native -O2 -pipe
 
 MKDIR			:= mkdir -p
 RM				:= rm -f
@@ -38,7 +38,7 @@ INSTALL			:= install
 GZIP			:= gzip
 GUNZIP			:= gunzip
 
-SRCS_NAME		 = c_lfiles
+SRCS_NAME		:= c_lfiles
 SRCS_NAME		+= c_opts
 SRCS_NAME		+= c_subst
 SRCS_NAME		+= c_unixize

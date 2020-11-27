@@ -38,8 +38,7 @@
 .\" THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .\"
 .\" unixize: man/unixize.1
-.\" 2020-11-14 20:57
-.\" date
+.\" Fri Nov 27 22:55:32 CET 2020
 .\" Joe
 .\"
 .\" Manpage for unixize.
@@ -55,15 +54,15 @@
 .Text \\$3\(lq\fB\\$1\f[]\(rq\\$2
 ..
 .de file_example
-.P
+.PP
 .RS
 \`\\$1\' \-\> \`\\$2\'
 .RE
-.P
+.PP
 ..
 .
 .
-.TH unixize 1 "15 November 2020" "unixize 1.0"
+.TH unixize 1 "27 November 2020" "unixize 1.0"
 .
 .
 .SH NAME
@@ -82,7 +81,7 @@
 .
 .
 .SH DESCRIPTION
-.P
+.PP
 The
 .B unixize
 utility renames all file in a given
@@ -92,7 +91,7 @@ to a predefined style. Here is a description of the
 behaviour without options. This behavious can be changed using options, see
 \(lqOPTIONS\(rq below. By default:
 .
-.P
+.PP
 .
 All upper-case characters will be set to lower-case.
 .
@@ -101,39 +100,185 @@ All upper-case characters will be set to lower-case.
 Spaces will be substitued by a
 .BR separator ,
 by default underscores
-.squoted_text _ ) (
+.squoted_text _ ). (
 .
 .file_example "a file with spaces.org" "a_file_with_spaces.org"
 .
 Multiple spaces will be condensed into only one
-.BR sparator .
+.BR separator .
 .
 .file_example "lots      of     spaces.gif" "lots_of_spaces.gif"
+.
+By default the
+.BR "opposite separator"
+is hyphen
+.squoted_text - ). (
+All
+.BR "opposite separator"
+will be changed to the chosen
+.BR separator ,
+underscores
+.squoted_text _ ) (
+by default.
+.
+.file_example "2004-with-the-lights-out" "2004_with_the_lights_out"
 .
 All unicode characters will be deleted
 except for latin extended ascii characters, which will be replaced by the most
 relevant ascii character (or double characters).
 .
-.file_example "\(Eu\-Hliðskjálf-\(de\(dd.jpg" "hlidhskjalf.jpg"
+.file_example "\(EuHliðskjálf\(de\(dd.jpg" "hlidhskjalf.jpg"
 .
 Two special patterns are always substitued, regardless of options.
-.P
-The first one is
+.PP
+The first sequence is
 .dquoted_text C\+\+ ,
 which will always be changed to
 .dquoted_text cxx
 whether the letter
 .squoted_text C
 is upper-case or lower-case.
-.P
 .
 .file_example "learn_c++_programming.pdf" "learn_cxx_programming.pdf"
 .
-The second one is removes the first dot
+The second one is the special case where the filename begins with a number,
+followed directly by a dot
 .squoted_text . ) (
+and another dot
+.squoted_text . ) (
+can be found later in the filename (for example the file's extension). In this
+case, the first dot is removed.
+.
+.file_example "07. Negative Creep.flac" "07_negative_creep.flac"
+.
+If another dot
+.squoted_text . ) (
+can't be found, nothing is changed.
+.
+.file_example "255.sql" "255.sql"
+.
+In the case where the renamed version of a file is already present in the
+.I directory
+(for example if \(lqREADME\(rq is being unixized but another \(lqreadme\(rq
+already exists), or if the renamed version is empty of text, the renaming of
+this file will be skipped.
 .SH OPTIONS
+.TP
+.B \-a
+Include directory entries whose names begin with a dot
+.squoted_text . ). (
+.TP
+.BI \-e\c ext
+Unixize certain file extensions.
+.I ext
+can be either
+.IR 0 ,
+.I 1
+or
+.IR 2 .
+Some file extensions are often prefered over other ones to specify the same file
+type in UNIX-like operating systems. With
+.I ext
+set to
+.IR 1 ,
+.dquoted_text .asm
+extensions will be changed to
+.dquoted_text .S ,
+.dquoted_text .cpp
+extensions will be changed to
+.dquoted_text .cc ,
+.dquoted_text .hpp
+extensions will be changed to
+.dquoted_text .hh
+and
+.dquoted_text .txt
+files will see their extension removed. When
+.I ext
+is set to
+.IR 2 ,
+all the previous rules are applied as well except that
+.dquoted_text .cpp
+extensions will be changed to
+.dquoted_text .cxx
+and
+.dquoted_text .hpp
+extensions will be changed to
+.dquoted_text .hxx .
+Default:
+.IR 0 .
+.TP
+.B \-h
+Output a brief help message.
+.TP
+.B \-i
+Prompt user before running
+.B unixize
+on the specified directory. If the
+.B \-R
+option is being used, the user will be prompted for each subdirectory the
+program is entering.
+.TP
+.B \-k
+Keep the opposite separator occurences in the filename. If the
+.B \-n
+option is not being used, all existing hyphens
+.squoted_text - ) (
+will be preserved. Otherwise, all existing underscores
+.squoted_text _ ) (
+will be kept.
+.RS 12
+\`screen 2020-10-21.mkv\' \-\> \`screen_2020-10-21.mkv\'
+.RE
+.TP
+.B \-n
+Use hyphens
+.squoted_text - ) (
+instead of underscores
+.squoted_text _ ) (
+as a
+.B separator
+and sets underscores as the
+.BR "opposite separator" .
+.RS 12
+\`04 School.mp3' \-\> \`04-school.mp3\'
+.RE
+.RS 12
+\`11-27_958x1078_scrot.png\' \-\> \`11-27-958x1078-scrot.png\'
+.RE
+.TP
+.B \-p
+Pretend only.
+.B unixize
+will run normally but will not actually rename any file. This
+option is intended to be used with the
+.B \-v
+and/or
+.B \-r
+options.
+.TP
+.B \-R
+Recursive mode. The program will enter and repeat into every subdirectories.
+.TP
+.B \-r
+Reverse verbose mode. Files that are not being renamed will be displayed to
+stdout.
+.TP
+.B \-v
+Verbose mode. File that are being renamed will be displayed to to stdout as well
+as their new version.
+.
+.SH BUG REPORT
+Please note that
+.B unixize
+was tested only on FreeBSD at the moment. Linux and macOS tests are coming soon.
+You can report bug at
+.I rbousset@42lyon.fr
+or on GitHub at
+.IR github.com/JozanLeClerc/unixize.git .
+.
 .SH SEE ALSO
 .IR ascii (7),
 .IR ls (1),
+.IR tree (1),
 .IR rename (2)
 .\" vim: set filetype=groff:
