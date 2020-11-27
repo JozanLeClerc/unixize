@@ -1,6 +1,6 @@
 #+TITLE: unixize
 
-*unixize* is a very small tool to bulk rename files into a cool UNIX-friendly
+*unixize* is a small tool to bulk rename files into a cool UNIX-friendly
 standard. Basically, everything becomes lowercase and there is no need to
 escape characters anymore when entering your filenames in a terminal. It
 also removes unicode characters.
@@ -35,8 +35,25 @@ Then build the program:
 make
 sudo make install clean
 #+END_SRC
+Note that on BSD systems you want to use ~gmake~ instead of ~make~:
+#+BEGIN_SRC shell
+gmake
+sudo gmake install clean
+#+END_SRC
+
+* Usage
+*USE WITH CAUTION*. Without the ~-p~ option, *unixize* will commit to do exactly
+what it's supposed to do, rename all the badly formatted in the chosen
+directory. To deunixize your files, you'll have to rename everything
+manually.
+#+BEGIN_SRC shell
+cd messy_directory
+unixize -v -r .
+#+END_SRC
 
 * End note
 Please note that unixize was tested only on FreeBSD at the moment.
 Linux and macOS tests are coming soon.  You can report bug on
 [[https://github.com/JozanLeClerc/unixize.git][GitHub]].
+
+Thanks for checking *unixize*.
