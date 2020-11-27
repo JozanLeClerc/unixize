@@ -12,7 +12,7 @@ man unixize
 to get a list of options.
 
 * Dependencies
-- a C compiler
+- A C compiler
 - GNU Make
 
 * Installation
@@ -42,7 +42,9 @@ sudo gmake install clean
 #+END_SRC
 
 * Usage
-*USE WITH CAUTION*. Without the ~-p~ option, *unixize* will commit to do exactly
+*USE WITH CAUTION*.
+
+Without the ~-p~ option, *unixize* will commit to do exactly
 what it's supposed to do, rename all the badly formatted in the chosen
 directory. To deunixize your files, you'll have to rename everything
 manually.
