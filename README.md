@@ -76,6 +76,7 @@ what it's supposed to do, rename all the badly formatted in the chosen
 directory. To deunixize your files, you'll have to rename everything
 manually.
 
+Example of usage:
 ```sh
 cd messy_directory
 unixize -v -r .
