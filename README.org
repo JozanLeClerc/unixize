@@ -1,3 +1,37 @@
 #+TITLE: unixize
 
-Simple test.
+*unixize* is a very small tool to bulk rename files into a cool UNIX-friendly
+standard. Basically, everything becomes lowercase and there is no need to
+escape characters anymore when entering your filenames in a terminal. It
+also removes unicode characters.
+
+*unixize* is configurable through options. Refer to
+#+BEGIN_SRC shell
+man unixize
+#+END_SRC
+to get a list of options.
+
+* Dependencies
+- a C compiler
+- GNU Make
+
+* Installation
+You can get *unixize* either through ~git~ or ~fossil~.
+
+For ~fossil~ use:
+#+BEGIN_SRC shell
+$ mkdir unixize
+$ cd unixize
+$ fossil clone https://chiselapp.com/user/JozanLeClerc/repository/unixize unixize.fossil
+$ fossil open --force unixize.fossil
+#+END_SRC
+or for ~git~:
+#+BEGIN_SRC shell
+$ git clone git://jozanleclerc.xyz/jozan/unixize.git
+$ cd unixize
+#+END_SRC
+Then build the program:
+#+BEGIN_SRC shell
+$ make
+# make install clean
+#+END_SRC
