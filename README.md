@@ -116,7 +116,8 @@ took less than one second.
 
 Please note that unixize was tested only on FreeBSD at the moment.
 Linux and macOS tests are coming soon.  You can report bug on
-[GitHub](https://github.com/JozanLeClerc/unixize.git).
+[GitHub](https://github.com/JozanLeClerc/unixize/issues) or on
+[Chisel](https://chiselapp.com/user/JozanLeClerc/repository/unixize/ticket).
 
 Thanks for checking **unixize**.
 
