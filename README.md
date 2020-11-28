@@ -79,13 +79,40 @@ manually.
 Example of usage:
 ```sh
 cd messy_directory
-unixize -v -r .
+unixize -R .
+tree
+  .
+  ├── Sub directory
+  │  ├── 01. IMG.JPG
+  │  ├── archive.tar.xz
+  │  └── zxc*:()ASD.qWe
+  ├── a file
+  ├── Bad-file.mkv
+  ├── good_file
+  ├── README
+  └── ‡‡‡‡song‡‡‡‡.mp3
+unixize -R .
+tree
+  .
+  ├── sub_directory
+  │  ├── 01_img.jpg
+  │  ├── archive.tar.xz
+  │  └── zxcasd.qwe
+  ├── a_file
+  ├── bad_file.mkv
+  ├── good_file
+  ├── readme
+  └── song.mp3
 ```
 
 
 <a id="orgf54857b"></a>
 
 # End note
+
+Despite being single-threaded, **unixize** performs well. Used on my whole music
+directory (14943 files and directories) on FreeBSD with UFS, the operation
+took less than one second.
 
 Please note that unixize was tested only on FreeBSD at the moment.
 Linux and macOS tests are coming soon.  You can report bug on
