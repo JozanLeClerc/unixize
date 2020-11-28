@@ -72,7 +72,7 @@ sudo gmake install clean
 **USE WITH CAUTION!**
 
 Without the `-p` option, **unixize** will commit to do exactly
-what it's supposed to do, rename all the badly formatted in the chosen
+what it's supposed to do, rename all the badly formatted files in the chosen
 directory. To deunixize your files, you'll have to rename everything
 manually.
 
